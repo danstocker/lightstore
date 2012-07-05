@@ -9,33 +9,64 @@ var rjson = require('./rjson').rjson,
     data = argv[4],
     dataStore;
 
-if (fileName) {
+/**
+ * Outputs an error message to stdio.
+ * @param err {Error|string}
+ */
+function error(err) {
+    if (typeof err === 'string') {
+        err = new Error(err);
+    }
+    stdout.write(err.toString() + "\n");
+}
+
+/**
+ * Ouputs a message to stdio.
+ * @param message {string}
+ */
+function ok(message) {
+    stdout.write(message + "\n");
+}
+
+if (!fileName) {
+    ok("Usage: node radiant fileName [command] [data]");
+} else {
     dataStore = rjson.create(fileName);
 
     switch (command) {
     case 'compact':
-        dataStore.compact(function () {
-            stdout.write("Datastore compacted.\n");
+        dataStore.compact(function (err) {
+            if (err) {
+                error(err);
+            } else {
+                ok("Datastore compacted.");
+            }
         });
         break;
+
     case 'write':
         if (typeof data !== 'undefined') {
-            dataStore.write(JSON.parse(data), function () {
-                stdout.write("Data written.\n");
-            });
+            var parsed;
+            try {
+                parsed = JSON.parse(data);
+                dataStore.write(parsed, function () {
+                    ok("Data written.");
+                });
+            } catch (e) {
+                error("Invalid JSON");
+            }
         }
         break;
+
     default:
     case 'read':
         dataStore.read(function (err, data) {
             if (err) {
-                console.log(err);
+                error(err);
             } else {
-                stdout.write(JSON.stringify(data, null, 2) + "\n");
+                ok(JSON.stringify(data, null, 2));
             }
         });
         break;
     }
-} else {
-    stdout.write("Usage: node radiant fileName [command] [data]\n");
 }

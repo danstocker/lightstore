@@ -21,12 +21,19 @@ rjson = troop.base.extend()
         /**
          * Reads the whole RJSON database file.
          * @param handler {function} Callback
-         * @return {object} Database contents.
          */
         read: function (handler) {
             fs.readFile(this.fileName, function (err, data) {
+                var parsed;
                 if (typeof handler === 'function') {
-                    handler(err, JSON.parse('{' + data.toString().slice(0, -1) + '}'));
+                    if (!err) {
+                        try {
+                            parsed  = JSON.parse('{' + data.toString().slice(0, -1) + '}');
+                        } catch (e) {
+                            err = new Error("Corrupted database contents.");
+                        }
+                    }
+                    handler(err, parsed);
                 }
             });
             return this;
@@ -39,8 +46,15 @@ rjson = troop.base.extend()
         compact: function (handler) {
             var that = this;
             this.read(function (err, data) {
-                fs.writeFile(that.fileName, JSON.stringify(data).slice(1, -1) + ',', handler);
+                if (err) {
+                    if (typeof handler === 'function') {
+                        handler(err);
+                    }
+                } else {
+                    fs.writeFile(that.fileName, JSON.stringify(data).slice(1, -1) + ',', handler);
+                }
             });
+            return this;
         },
 
         /**
