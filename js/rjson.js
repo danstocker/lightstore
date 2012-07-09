@@ -5,7 +5,7 @@
  * the last value (which is also the latest) will be used.
  */
 var fs = require('fs'),
-    troop = require('../lib/troop/troop-0.1.3').troop,
+    troop = require('troop-0.1.3').troop,
     rjson;
 
 rjson = troop.base.extend({

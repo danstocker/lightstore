@@ -1,7 +1,7 @@
 /**
  * Base Application Class
  */
-var troop = require('../lib/troop/troop-0.1.3').troop,
+var troop = require('troop-0.1.3').troop,
     rjson = require('./rjson').rjson,
     stdout = process.stdout,
     app;
