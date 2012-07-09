@@ -1,8 +1,8 @@
 /**
- * Radiant - Simple RJSON Datastore.
+ * Base Application Class
  */
-var rjson = require('./rjson').rjson,
-    troop = require('../lib/troop/troop-0.1.3').troop,
+var troop = require('../lib/troop/troop-0.1.3').troop,
+    rjson = require('./rjson').rjson,
     stdout = process.stdout,
     app;
 
