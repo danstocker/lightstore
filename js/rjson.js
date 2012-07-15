@@ -4,8 +4,8 @@
  * RJSON may contain the same key several times over. Upon parsing,
  * the last value (which is also the latest) will be used.
  */
-var fs = require('fs'),
-    troop = require('troop-0.1.3').troop,
+var fs = fs || require('fs'),
+    troop = troop || require('troop-0.1.3').troop,
     rjson;
 
 rjson = troop.base.extend({
