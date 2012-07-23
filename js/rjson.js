@@ -28,7 +28,8 @@ rjson = troop.base.extend({
      * @param handler {function} Callback
      */
     read: function (handler) {
-        fs.readFile(this.fileName, function (err, data) {
+        var that = this;
+        fs.readFile(that.fileName, function (err, data) {
             var parsed;
             if (typeof handler === 'function') {
                 if (!err) {
@@ -38,7 +39,7 @@ rjson = troop.base.extend({
                         err = new Error("Corrupted database contents.");
                     }
                 }
-                handler(err, parsed);
+                handler.call(that, err, parsed);
             }
         });
         return this;
@@ -53,10 +54,14 @@ rjson = troop.base.extend({
         this.read(function (err, data) {
             if (err) {
                 if (typeof handler === 'function') {
-                    handler(err);
+                    handler.call(that, err);
                 }
             } else {
-                fs.writeFile(that.fileName, JSON.stringify(data).slice(1, -1) + ',', handler);
+                fs.writeFile(that.fileName, JSON.stringify(data).slice(1, -1) + ',', function () {
+                    if (typeof handler === 'function') {
+                        handler.apply(that, arguments);
+                    }
+                });
             }
         });
         return this;
@@ -68,8 +73,13 @@ rjson = troop.base.extend({
      * @param handler {function} Callback
      */
     write: function (data, handler) {
-        fs.appendFile(this.fileName, JSON.stringify(data).slice(1, -1) + ',', handler);
-        return this;
+        var that = this;
+        fs.appendFile(that.fileName, JSON.stringify(data).slice(1, -1) + ',', function () {
+            if (typeof handler === 'function') {
+                handler.apply(that, arguments);
+            }
+        });
+        return that;
     }
 });
 
