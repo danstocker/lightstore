@@ -26,7 +26,7 @@ do
 done
 
 cat \
-js/rjson.js \
+js/Rjson.js \
 > "build/$NAME.js"
 
 if type yui-compressor >/dev/null 2>&1

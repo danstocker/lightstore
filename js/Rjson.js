@@ -6,9 +6,9 @@
  */
 var fs = fs || require('fs'),
     troop = troop || require('troop-0.1.4').troop,
-    rjson;
+    self;
 
-rjson = troop.base.extend({
+self = exports.Rjson = troop.base.extend({
     //////////////////////////////
     // OOP
 
@@ -82,5 +82,3 @@ rjson = troop.base.extend({
         return that;
     }
 });
-
-exports.rjson = rjson;

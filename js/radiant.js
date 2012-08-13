@@ -2,11 +2,11 @@
  * Command line tool for accessing RJSON databases.
  */
 var troop = require('troop-0.1.4').troop,
-    rjson = require('./rjson').rjson,
+    Rjson = require('./Rjson').Rjson,
     stdout = process.stdout,
     argv = process.argv,
     fileName = argv[2],
-    dataStore = rjson.create(fileName),
+    rjson = Rjson.create(fileName),
     command = argv[3],
     data = argv[4];
 
@@ -50,7 +50,7 @@ case 'compact':
     /**
      * Compacting database.
      */
-    dataStore.compact(function (err) {
+    rjson.compact(function (err) {
         if (err) {
             error(err);
         } else {
@@ -67,7 +67,7 @@ case 'write':
         var parsed;
         try {
             parsed = JSON.parse(data);
-            dataStore.write(parsed, function () {
+            rjson.write(parsed, function () {
                 ok("Data written.");
             });
         } catch (e) {
@@ -81,7 +81,7 @@ case 'read':
     /**
      * Reading database and outputs contents.
      */
-    dataStore.read(function (err, data) {
+    rjson.read(function (err, data) {
         if (err) {
             error(err);
         } else {
