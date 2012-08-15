@@ -5,10 +5,10 @@
  * the last value (which is also the latest) will be used.
  */
 var fs = fs || require('fs'),
-    troop = troop || require('troop-0.1.5').troop,
+    troop = troop || require('troop-latest').troop,
     self;
 
-self = exports.Rjson = troop.base.extend({
+self = exports.Rjson = troop.Base.extend({
     //////////////////////////////
     // OOP
 
