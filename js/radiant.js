@@ -1,7 +1,7 @@
 /**
  * Command line tool for accessing RJSON databases.
  */
-var troop = require('troop-latest').troop,
+var troop = require('troop-0.1.6').troop,
     Rjson = require('./Rjson').Rjson,
     stdout = process.stdout,
     argv = process.argv,
