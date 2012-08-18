@@ -17,18 +17,20 @@ Usage
 API
 ---
 
-`rjson`: [Troop](https://github.com/production-minds/troop)-based class for handling RJSON.
+`Rjson`: [Troop](https://github.com/production-minds/troop)-based class for handling RJSON.
 
 - `.create(fileName)`: Creates a new RJSON instance for the file `fileName`.
 - `.read(handler)`: Reads file, then passes error object and contents to `handler`.
 - `.write(data, handler)`: Writes `data` and calls `handler`.
-- `.compact()`: Compacts database.
+- `.compact()`: Compacts database. Removes overwritten keys from file.
 
 Example
 -------
 
-    var db = rjson.create('test.rjson');
+```javascript
+    var db = require('Rjson').Rjson.create('test.rjson');
     db.write({hello: "world", foo: "bar"});
     db.read(function (err, data) {
         console.log(data);
     });
+```
