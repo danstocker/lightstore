@@ -81,5 +81,5 @@
     });
 }(
     require('fs'),
-    require('troop-0.1.7').troop
+    require('troop-0.1.8').troop
 ));
