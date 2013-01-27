@@ -4,7 +4,11 @@
  * RJSON may contain the same key several times over. Upon parsing,
  * the last value (which is also the latest) will be used.
  */
-(function (fs, dessert, troop) {
+/*global dessert, troop */
+require('dessert-0.2.3');
+require('troop-0.2.3');
+
+(function (fs) {
     var self = exports.Rjson = troop.Base.extend()
         .addMethod({
             //////////////////////////////
@@ -95,7 +99,5 @@
             }
         });
 }(
-    require('fs'),
-    require('dessert-0.2.3').dessert,
-    require('troop-0.2.3').troop
+    require('fs')
 ));
