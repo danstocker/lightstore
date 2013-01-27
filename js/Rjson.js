@@ -96,6 +96,6 @@
         });
 }(
     require('fs'),
-    require('dessert-0.2.2').dessert,
-    require('troop-0.2.2').troop
+    require('dessert-0.2.3').dessert,
+    require('troop-0.2.3').troop
 ));

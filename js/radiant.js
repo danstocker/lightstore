@@ -90,6 +90,6 @@
         break;
     }
 }(
-    require('troop-0.2.2').troop,
+    require('troop-0.2.3').troop,
     require('./Rjson').Rjson
 ));
