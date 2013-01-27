@@ -34,7 +34,10 @@ troop.promise('radiant.Rjson', function (radiant, className, fs) {
             read: function (handler) {
                 dessert.isFunction(handler);
 
-                fs.readFile(this.fileName, self._onData.bind(this, handler));
+                fs.readFile(
+                    this.fileName,
+                    self._onData.bind(this, handler)
+                );
 
                 return this;
             },
@@ -46,21 +49,7 @@ troop.promise('radiant.Rjson', function (radiant, className, fs) {
             compact: function (handler) {
                 dessert.isFunctionOptional(handler);
 
-                var that = this;
-
-                this.read(function (err, data) {
-                    if (err) {
-                        if (typeof handler === 'function') {
-                            handler.call(that, err);
-                        }
-                    } else {
-                        fs.writeFile(that.fileName, JSON.stringify(data).slice(1, -1) + ',', function () {
-                            if (typeof handler === 'function') {
-                                handler.apply(that, arguments);
-                            }
-                        });
-                    }
-                });
+                this.read(self._onCompact.bind(this, handler));
 
                 return this;
             },
@@ -77,16 +66,25 @@ troop.promise('radiant.Rjson', function (radiant, className, fs) {
 
                 var that = this;
 
-                fs.appendFile(that.fileName, JSON.stringify(data).slice(1, -1) + ',', function () {
-                    if (typeof handler === 'function') {
-                        handler.apply(that, arguments);
-                    }
-                });
+                fs.appendFile(
+                    that.fileName,
+                    JSON.stringify(data).slice(1, -1) + ',',
+                    typeof handler === 'function' ?
+                        handler.bind(this) :
+                        undefined
+                );
 
                 return that;
             }
         })
         .addPrivateMethod({
+            /**
+             * Called when data is read from disk.
+             * @param handler {function}
+             * @param err
+             * @param data {object}
+             * @private
+             */
             _onData: function (handler, err, data) {
                 var parsed;
 
@@ -99,6 +97,31 @@ troop.promise('radiant.Rjson', function (radiant, className, fs) {
                 }
 
                 handler.call(this, err, parsed);
+            },
+
+            /**
+             * Called when data is loaded and is ready to be compacted.
+             * Saves data back to disk immediately on success,
+             * calls handler (if any) immediately on error.
+             * @param handler {function}
+             * @param err
+             * @param data {object}
+             * @private
+             */
+            _onCompact: function (handler, err, data) {
+                if (err) {
+                    if (typeof handler === 'function') {
+                        handler.call(this, err);
+                    }
+                } else {
+                    fs.writeFile(
+                        this.fileName,
+                        JSON.stringify(data).slice(1, -1) + ',',
+                        typeof handler === 'function' ?
+                            handler.bind(this) :
+                            undefined
+                    );
+                }
             }
         });
 }, require('fs'));
