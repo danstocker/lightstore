@@ -1,11 +1,15 @@
 /**
  * Command line tool for accessing RJSON databases.
  */
-(function (troop, Rjson) {
+/*global radiant */
+require('./namespace');
+require('./Rjson');
+
+(function () {
     var stdout = process.stdout,
         argv = process.argv,
         fileName = argv[2],
-        rjson = Rjson.create(fileName),
+        rjson = radiant.Rjson.create(fileName),
         command = argv[3],
         data = argv[4];
 
@@ -89,7 +93,4 @@
         });
         break;
     }
-}(
-    require('troop-0.2.3').troop,
-    require('./Rjson').Rjson
-));
+}());

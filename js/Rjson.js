@@ -8,8 +8,8 @@
 require('dessert-0.2.3');
 require('troop-0.2.3');
 
-(function (fs) {
-    var self = exports.Rjson = troop.Base.extend()
+troop.promise('radiant.Rjson', function (radiant, className, fs) {
+    var self = radiant.Rjson = troop.Base.extend()
         .addMethod({
             //////////////////////////////
             // OOP
@@ -19,7 +19,9 @@ require('troop-0.2.3');
              * @param fileName {string} Name of database file.
              */
             init: function (fileName) {
-                this.fileName = fileName;
+                this.addConstant({
+                    fileName: fileName
+                });
             },
 
             //////////////////////////////
@@ -32,21 +34,7 @@ require('troop-0.2.3');
             read: function (handler) {
                 dessert.isFunction(handler);
 
-                var that = this;
-
-                fs.readFile(that.fileName, function (err, data) {
-                    var parsed;
-
-                    if (!err) {
-                        try {
-                            parsed = JSON.parse('{' + data.toString().slice(0, -1) + '}');
-                        } catch (e) {
-                            err = new Error("Corrupted database contents.");
-                        }
-                    }
-
-                    handler.call(that, err, parsed);
-                });
+                fs.readFile(this.fileName, self._onData.bind(this, handler));
 
                 return this;
             },
@@ -97,7 +85,20 @@ require('troop-0.2.3');
 
                 return that;
             }
+        })
+        .addPrivateMethod({
+            _onData: function (handler, err, data) {
+                var parsed;
+
+                if (!err) {
+                    try {
+                        parsed = JSON.parse('{' + data.toString().slice(0, -1) + '}');
+                    } catch (e) {
+                        err = new Error("Corrupted database contents.");
+                    }
+                }
+
+                handler.call(this, err, parsed);
+            }
         });
-}(
-    require('fs')
-));
+}, require('fs'));
