@@ -6,5 +6,6 @@
 LIB="radiant"
 
 FILES="
+js/namespace.js
 js/Rjson.js
 "

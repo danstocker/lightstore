@@ -5,9 +5,6 @@
  * the last value (which is also the latest) will be used.
  */
 /*global dessert, troop */
-require('dessert-0.2.3');
-require('troop-0.2.3');
-
 troop.promise('radiant.Rjson', function (radiant, className, fs) {
     var self = radiant.Rjson = troop.Base.extend()
         .addMethod({
