@@ -64,17 +64,15 @@ Rjson = exports.Rjson = troop.Base.extend()
                 .isObject(data)
                 .isFunctionOptional(handler);
 
-            var that = this;
-
             fs.appendFile(
-                that.fileName,
+                this.fileName,
                 JSON.stringify(data).slice(1, -1) + ',',
                 typeof handler === 'function' ?
                     handler.bind(this) :
                     undefined
             );
 
-            return that;
+            return this;
         }
     })
     .addPrivateMethod({
