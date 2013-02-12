@@ -2,14 +2,13 @@
  * Command line tool for accessing RJSON databases.
  */
 /*global radiant */
-require('./namespace');
-require('./Rjson');
+var Rjson = require('./Rjson').Rjson;
 
 (function () {
     var stdout = process.stdout,
         argv = process.argv,
         fileName = argv[2],
-        rjson = radiant.Rjson.create(fileName),
+        rjson = Rjson.create(fileName),
         command = argv[3],
         data = argv[4];
 

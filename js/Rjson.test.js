@@ -1,14 +1,15 @@
 /*global module, test, expect, raises, ok, equal */
-(function (radiant, troop, fs) {
+/*global troop, Rjson */
+(function (fs) {
     module("Rjson");
 
     test("Creation", function () {
-        var rjson = radiant.Rjson.create('test.foo');
+        var rjson = Rjson.create('test.foo');
         equal(rjson.fileName, 'test.foo', "File name initialized");
     });
 
     test("Reading", function () {
-        var rjson = radiant.Rjson.create('test.foo');
+        var rjson = Rjson.create('test.foo');
 
         expect(2);
 
@@ -28,7 +29,7 @@
     });
 
     test("Writing (appending)", function () {
-        var rjson = radiant.Rjson.create('test.foo');
+        var rjson = Rjson.create('test.foo');
 
         expect(3);
 
@@ -52,11 +53,11 @@
     });
 
     test("Compaction", function () {
-        var rjson = radiant.Rjson.create('test.foo');
+        var rjson = Rjson.create('test.foo');
 
         expect(2);
 
-        radiant.Rjson.addMock({
+        Rjson.addMock({
             read: function (handler) {
                 ok(typeof handler === 'function', "");
             }
@@ -68,6 +69,6 @@
 
         rjson.compact();
 
-        radiant.Rjson.removeMocks();
+        Rjson.removeMocks();
     });
-}(this.radiant, this.troop, require('fs')));
+}(require('fs')));

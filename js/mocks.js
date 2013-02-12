@@ -1,4 +1,3 @@
 /*global troop */
-(function () {
-    this.require = troop.mockRequire();
-}());
+var exports = {},
+    require = troop.mockRequire();
