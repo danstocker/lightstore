@@ -1,6 +1,8 @@
 /*global module, test, expect, raises, ok, equal */
-/*global troop, Rjson */
-(function (fs) {
+/*global troop */
+(function (fs, Rjson) {
+    'use strict';
+
     module("Rjson");
 
     test("Creation", function () {
@@ -71,4 +73,4 @@
 
         Rjson.removeMocks();
     });
-}(require('fs')));
+}(require('fs'), require('Rjson').Rjson));

@@ -4,6 +4,8 @@
  * RJSON may contain the same key several times over. Upon parsing,
  * the last value (which is also the latest) will be used.
  */
+'use strict';
+
 var dessert = dessert || require('dessert-0.2.3').dessert,
     troop = troop || require('troop-0.2.3').troop,
     fs = require('fs'),

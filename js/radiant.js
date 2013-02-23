@@ -2,6 +2,8 @@
  * Command line tool for accessing RJSON databases.
  */
 /*global radiant */
+'use strict';
+
 var Rjson = require('./Rjson').Rjson;
 
 (function () {
