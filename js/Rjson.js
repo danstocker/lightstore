@@ -6,8 +6,8 @@
  */
 'use strict';
 
-var dessert = dessert || require('dessert-0.2.3').dessert,
-    troop = troop || require('troop-0.2.3').troop,
+var dessert = dessert || require('dessert-0.2.4').dessert,
+    troop = troop || require('troop-0.3.0').troop,
     fs = require('fs'),
     Rjson;
 
@@ -34,7 +34,7 @@ Rjson = exports.Rjson = troop.Base.extend()
          * @param handler {function} Callback
          */
         read: function (handler) {
-            dessert.isFunction(handler);
+            dessert.isFunction(handler, "Invalid read handler");
 
             fs.readFile(
                 this.fileName,
@@ -49,7 +49,7 @@ Rjson = exports.Rjson = troop.Base.extend()
          * @param [handler] {function} Callback
          */
         compact: function (handler) {
-            dessert.isFunctionOptional(handler);
+            dessert.isFunctionOptional(handler, "Invalid compaction handler");
 
             this.read(this._onCompact.bind(this, handler));
 
@@ -63,8 +63,8 @@ Rjson = exports.Rjson = troop.Base.extend()
          */
         write: function (data, handler) {
             dessert
-                .isObject(data)
-                .isFunctionOptional(handler);
+                .isObject(data, "Invalid write data buffer")
+                .isFunctionOptional(handler, "Invalid write handler");
 
             fs.appendFile(
                 this.fileName,
