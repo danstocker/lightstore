@@ -8,3 +8,5 @@ LIB="radiant"
 FILES="
 js/Rjson.js
 "
+
+LICENSE="js/license.js"
