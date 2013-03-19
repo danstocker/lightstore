@@ -6,12 +6,11 @@
  */
 'use strict';
 
-var dessert = dessert || require('dessert-0.2.4').dessert,
-    troop = troop || require('troop-0.3.0').troop,
-    fs = require('fs'),
-    Rjson;
+var dessert = dessert || require('dessert').dessert,
+    troop = troop || require('troop').troop,
+    fs = require('fs');
 
-Rjson = exports.Rjson = troop.Base.extend()
+exports.Rjson = troop.Base.extend()
     .addMethod({
         //////////////////////////////
         // OOP
