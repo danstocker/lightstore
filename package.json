@@ -1,6 +1,6 @@
 {
     "name"        : "radiant",
-    "version"     : "0.1.3",
+    "version"     : "0.1.2",
     "description" : "JSON key-value store",
     "keywords"    : ["json", "datastore", "key-value"],
     "author"      : "Dan Stocker <dan@kwaia.com>",
@@ -9,8 +9,8 @@
         "url" : "https://github.com/danstocker/radiant.git"
     },
     "dependencies": {
-        "dessert": ">=0.2.4",
-        "troop"  : ">=0.3.0"
+        "dessert": ">=0.2.8",
+        "troop"  : ">=0.3.6"
     },
     "files"       : ["out/radiant.js"],
     "main"        : "out/radiant.js"
