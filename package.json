@@ -1,17 +1,29 @@
 {
-    "name"        : "radiant",
-    "version"     : "0.1.2",
-    "description" : "JSON key-value store",
-    "keywords"    : ["json", "datastore", "key-value"],
-    "author"      : "Dan Stocker <dan@kwaia.com>",
-    "repository"  : {
+    "name"           : "radiant",
+    "version"        : "0.1.2",
+    "description"    : "JSON key-value store",
+    "keywords"       : ["json", "datastore", "key-value"],
+    "author"         : "Dan Stocker <dan@kwaia.com>",
+    "repository"     : {
         "type": "git",
         "url" : "https://github.com/danstocker/radiant.git"
     },
-    "dependencies": {
-        "dessert": ">=0.2.8",
-        "troop"  : ">=0.3.6"
+    "dependencies"   : {
+        "dessert": "~0.3.2",
+        "troop"  : "~0.5.1"
     },
-    "files"       : ["out/radiant.js"],
-    "main"        : "out/radiant.js"
+    "devDependencies": {
+        "phil"                : "~0.2.3",
+        "grunt"               : "~0.4.1",
+        "grunt-jstestdriver"  : "git://github.com/danstocker/grunt-jstestdriver.git",
+        "grunt-contrib-concat": "~0.3.0",
+        "grunt-contrib-jshint": "~0.5.4",
+        "grunt-yui-compressor": "~0.3.0",
+        "grunt-contrib-copy"  : "~0.4.1",
+        "grunt-jsdoc"         : "~0.3.3",
+        "grunt-regex-replace" : "~0.2.5",
+        "common-gruntfile"    : "git://github.com/danstocker/common-gruntfile.git#0.1.5",
+        "QUnitAdapter"        : "https://dl.dropboxusercontent.com/u/9258903/packages/QUnitAdapter-0.1.0.tgz"
+    },
+    "main"           : "js/radiant.js"
 }

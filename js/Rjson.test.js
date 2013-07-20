@@ -19,7 +19,7 @@
             rjson.read();
         }, "Calling read without a handler specified");
 
-        fs.addMock({
+        fs.addMocks({
             readFile: function (fileName) {
                 equal(fileName, 'test.foo', "File name received");
             }
@@ -43,7 +43,7 @@
             rjson.write({foo: "bar"}, "non-function");
         }, "Calling write with invalid handler");
 
-        fs.addMock({
+        fs.addMocks({
             appendFile: function (fileName) {
                 equal(fileName, 'test.foo', "File name received");
             }
@@ -59,7 +59,7 @@
 
         expect(2);
 
-        Rjson.addMock({
+        Rjson.addMocks({
             read: function (handler) {
                 ok(typeof handler === 'function', "");
             }

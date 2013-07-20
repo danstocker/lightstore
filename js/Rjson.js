@@ -6,27 +6,22 @@
  */
 'use strict';
 
-var dessert = dessert || require('dessert').dessert,
-    troop = troop || require('troop').troop,
+var dessert = dessert || require('dessert'),
+    troop = troop || require('troop'),
     fs = require('fs');
 
 exports.Rjson = troop.Base.extend()
-    .addMethod({
-        //////////////////////////////
-        // OOP
-
+    .addMethods({
         /**
          * Initializes RJSON.
          * @param fileName {string} Name of database file.
          */
         init: function (fileName) {
-            this.addConstant({
-                fileName: fileName
-            });
+            /**
+             * @constant
+             */
+            this.fileName = fileName;
         },
-
-        //////////////////////////////
-        // Datastore methods
 
         /**
          * Reads the whole RJSON database file.
@@ -76,7 +71,7 @@ exports.Rjson = troop.Base.extend()
             return this;
         }
     })
-    .addPrivateMethod({
+    .addPrivateMethods({
         /**
          * Called when data is read from disk.
          * @param handler {function}

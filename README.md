@@ -27,10 +27,8 @@ API
 Example
 -------
 
-```javascript
     var db = require('Rjson').Rjson.create('test.rjson');
     db.write({hello: "world", foo: "bar"});
     db.read(function (err, data) {
         console.log(data);
     });
-```
