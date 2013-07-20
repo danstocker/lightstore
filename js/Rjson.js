@@ -4,6 +4,7 @@
  * RJSON may contain the same key several times over. Upon parsing,
  * the last value (which is also the latest) will be used.
  */
+/*jshint node:true */
 'use strict';
 
 var dessert = dessert || require('dessert'),
