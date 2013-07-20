@@ -1,4 +1,5 @@
 /*global troop */
+/*jshint node:true */
 'use strict';
 
 var exports = troop.Base.extend()

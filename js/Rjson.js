@@ -9,24 +9,27 @@
 
 var dessert = dessert || require('dessert'),
     troop = troop || require('troop'),
-    fs = require('fs');
+    fs = require('fs'),
+    Rjson;
 
-exports.Rjson = troop.Base.extend()
-    .addMethods({
+Rjson = troop.Base.extend()
+    .addMethods(/** @lends Rjson# */{
         /**
          * Initializes RJSON.
-         * @param fileName {string} Name of database file.
+         * @param {string} fileName Name of database file.
          */
         init: function (fileName) {
             /**
              * @constant
+             * @type {string}
              */
             this.fileName = fileName;
         },
 
         /**
          * Reads the whole RJSON database file.
-         * @param handler {function} Callback
+         * @param {function} handler Callback
+         * @returns {Rjson}
          */
         read: function (handler) {
             dessert.isFunction(handler, "Invalid read handler");
@@ -41,7 +44,8 @@ exports.Rjson = troop.Base.extend()
 
         /**
          * Compacts database files.
-         * @param [handler] {function} Callback
+         * @param {function} [handler] Callback
+         * @returns {Rjson}
          */
         compact: function (handler) {
             dessert.isFunctionOptional(handler, "Invalid compaction handler");
@@ -53,8 +57,9 @@ exports.Rjson = troop.Base.extend()
 
         /**
          * Writes object to database.
-         * @param data {object}
-         * @param [handler] {function} Callback
+         * @param {object} data
+         * @param {function} [handler] Callback
+         * @returns {Rjson}
          */
         write: function (data, handler) {
             dessert
@@ -72,12 +77,12 @@ exports.Rjson = troop.Base.extend()
             return this;
         }
     })
-    .addPrivateMethods({
+    .addPrivateMethods(/** @lends Rjson# */{
         /**
          * Called when data is read from disk.
-         * @param handler {function}
-         * @param err
-         * @param data {object}
+         * @param {function} handler
+         * @param {object} err
+         * @param {object} data
          * @private
          */
         _onData: function (handler, err, data) {
@@ -98,9 +103,9 @@ exports.Rjson = troop.Base.extend()
          * Called when data is loaded and is ready to be compacted.
          * Saves data back to disk immediately on success,
          * calls handler (if any) immediately on error.
-         * @param handler {function}
-         * @param err
-         * @param data {object}
+         * @param {function} handler
+         * @param {object} err
+         * @param {object} data
          * @private
          */
         _onCompact: function (handler, err, data) {
@@ -119,3 +124,5 @@ exports.Rjson = troop.Base.extend()
             }
         }
     });
+
+module.exports = Rjson;

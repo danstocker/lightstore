@@ -5,7 +5,7 @@
 /*jshint node:true */
 'use strict';
 
-var Rjson = require('./Rjson').Rjson;
+var Rjson = require('./Rjson');
 
 (function () {
     var stdout = process.stdout,

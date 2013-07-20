@@ -1,6 +1,7 @@
 /*global module, test, expect, raises, ok, equal */
-/*global troop */
-(function (fs, Rjson) {
+/*global troop, Rjson */
+/*jshint node:true */
+(function (fs) {
     'use strict';
 
     module("Rjson");
@@ -73,4 +74,4 @@
 
         Rjson.removeMocks();
     });
-}(require('fs'), require('Rjson').Rjson));
+}(require('fs')));
