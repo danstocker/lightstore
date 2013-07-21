@@ -6,6 +6,57 @@
 
     module("KeyValueStore");
 
+    test("Rjson to tree conversion", function () {
+        var rjson = {
+            "test>path"      : "hello",
+            "test>foo"       : 1,
+            "foo>bar>baz"    : {hello: "world"},
+            "test>path>hello": "all",
+            "foo>bar>baz>boo": 1234
+        };
+
+        deepEqual(
+            radiant.KeyValueStore._convertToTree(rjson),
+            {
+                test: {
+                    foo : 1,
+                    path: {
+                        hello: "all"
+                    }
+                },
+                foo : {
+                    bar: {
+                        baz: {
+                            hello: "world",
+                            boo  : 1234
+                        }
+                    }
+                }
+            },
+            "Rjson converted to tree"
+        );
+    });
+
+    test("Read", function () {
+        expect(2);
+
+        var store = radiant.KeyValueStore.create('foo.rjson'),
+            result;
+
+        function onRead() {}
+
+        radiant.Rjson.addMocks({
+            read: function () {
+                ok(true, "Read called");
+            }
+        });
+
+        result = store.read(onRead);
+        strictEqual(result, store, "Reading is chainable");
+
+        radiant.Rjson.removeMocks();
+    });
+
     test("Write", function () {
         expect(3);
 
