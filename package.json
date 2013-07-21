@@ -25,5 +25,8 @@
         "grunt-regex-replace" : "~0.2.5",
         "QUnitAdapter"        : "https://dl.dropboxusercontent.com/u/9258903/packages/QUnitAdapter-0.1.0.tgz"
     },
-    "main"           : "js/exports.js"
+    "files"          : [
+        "radiant.js"
+    ],
+    "main"           : "radiant.js"
 }
