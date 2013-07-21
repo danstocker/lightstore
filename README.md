@@ -1,12 +1,12 @@
-Radiant
-=======
+LightStore
+==========
 
 RJSON (redundant JSON) JavaScript persistence for Node (0.8).
 
 Usage
 -----
 
-`node radiant fileName [command] [data]`
+`node lightstore fileName [command] [data]`
 
 - `command`:
     - `read`: Reads database contents and outputs to stdout as compacted JSON.

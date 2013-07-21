@@ -4,26 +4,26 @@
  * RJSON may contain the same key several times over. Upon parsing,
  * the last value (which is also the latest) will be used.
  */
-/*global dessert, troop, radiant */
+/*global dessert, troop, lightstore */
 /*jshint node:true */
-troop.postpone(radiant, 'Rjson', function () {
+troop.postpone(lightstore, 'Rjson', function () {
     'use strict';
 
     var fs = require('fs');
 
     /**
-     * @name radiant.Rjson.create
+     * @name lightstore.Rjson.create
      * @function
      * @param {string} fileName Name of database file.
-     * @returns {radiant.Rjson}
+     * @returns {lightstore.Rjson}
      */
 
     /**
      * @class
      * @extends troop.Base
      */
-    radiant.Rjson = troop.Base.extend()
-        .addPrivateMethods(/** @lends radiant.Rjson# */{
+    lightstore.Rjson = troop.Base.extend()
+        .addPrivateMethods(/** @lends lightstore.Rjson# */{
             /**
              * Called when data is read from disk.
              * @param {function} handler
@@ -70,7 +70,7 @@ troop.postpone(radiant, 'Rjson', function () {
                 }
             }
         })
-        .addMethods(/** @lends radiant.Rjson# */{
+        .addMethods(/** @lends lightstore.Rjson# */{
             /**
              * Initializes RJSON.
              * @param {string} fileName Name of database file.
@@ -86,7 +86,7 @@ troop.postpone(radiant, 'Rjson', function () {
             /**
              * Reads the whole RJSON database file.
              * @param {function} handler Callback
-             * @returns {radiant.Rjson}
+             * @returns {lightstore.Rjson}
              */
             read: function (handler) {
                 dessert.isFunction(handler, "Invalid read handler");
@@ -102,7 +102,7 @@ troop.postpone(radiant, 'Rjson', function () {
             /**
              * Compacts database files.
              * @param {function} [handler] Callback
-             * @returns {radiant.Rjson}
+             * @returns {lightstore.Rjson}
              */
             compact: function (handler) {
                 dessert.isFunctionOptional(handler, "Invalid compaction handler");
@@ -116,7 +116,7 @@ troop.postpone(radiant, 'Rjson', function () {
              * Writes object to database.
              * @param {object} data
              * @param {function} [handler] Callback
-             * @returns {radiant.Rjson}
+             * @returns {lightstore.Rjson}
              */
             write: function (data, handler) {
                 dessert

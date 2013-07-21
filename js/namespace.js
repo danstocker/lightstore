@@ -3,7 +3,7 @@
  */
 /*global require */
 /** @namespace */
-var radiant = {},
+var lightstore = {},
     dessert = dessert || require('dessert'),
     troop = troop || require('troop'),
     sntls = sntls || require('sntls');

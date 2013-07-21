@@ -1,8 +1,8 @@
 /**
  * Library exports
  */
-/*global radiant */
+/*global lightstore */
 /*jshint node:true */
 if (typeof module === 'object') {
-    module.exports = radiant;
+    module.exports = lightstore;
 }

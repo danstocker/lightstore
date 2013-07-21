@@ -1,5 +1,5 @@
 /*global module, test, expect, raises, ok, equal, deepEqual, strictEqual */
-/*global radiant */
+/*global lightstore */
 /*jshint node:true */
 (function () {
     'use strict';
@@ -34,13 +34,13 @@
             };
 
         deepEqual(
-            radiant.KeyValueStore._compactBuffer(rjsonFragmented),
+            lightstore.KeyValueStore._compactBuffer(rjsonFragmented),
             rjsonCompacted,
             "Fragmented RJSON compacted"
         );
 
         deepEqual(
-            radiant.KeyValueStore._compactBuffer(rjsonCompacted),
+            lightstore.KeyValueStore._compactBuffer(rjsonCompacted),
             rjsonCompacted,
             "Compacted RJSON compacted again"
         );
@@ -49,12 +49,12 @@
     test("Read", function () {
         expect(2);
 
-        var store = radiant.KeyValueStore.create('foo.rjson'),
+        var store = lightstore.KeyValueStore.create('foo.rjson'),
             result;
 
         function onRead() {}
 
-        radiant.Rjson.addMocks({
+        lightstore.Rjson.addMocks({
             read: function () {
                 ok(true, "Read called");
             }
@@ -63,18 +63,18 @@
         result = store.read(onRead);
         strictEqual(result, store, "Reading is chainable");
 
-        radiant.Rjson.removeMocks();
+        lightstore.Rjson.removeMocks();
     });
 
     test("Write", function () {
         expect(3);
 
-        var store = radiant.KeyValueStore.create('foo.rjson'),
+        var store = lightstore.KeyValueStore.create('foo.rjson'),
             result;
 
         function onSaved() {}
 
-        radiant.Rjson.addMocks({
+        lightstore.Rjson.addMocks({
             write: function (buffer, handler) {
                 deepEqual(
                     buffer,
@@ -91,6 +91,6 @@
         result = store.write(['test', 'path'].toPath(), {foo: "bar"}, onSaved);
         strictEqual(result, store, "Writing is chainable");
 
-        radiant.Rjson.removeMocks();
+        lightstore.Rjson.removeMocks();
     });
 }());

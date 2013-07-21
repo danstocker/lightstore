@@ -1,31 +1,31 @@
-/*global dessert, troop, sntls, radiant */
-troop.postpone(radiant, 'KeyValueStore', function () {
+/*global dessert, troop, sntls, lightstore */
+troop.postpone(lightstore, 'KeyValueStore', function () {
     "use strict";
 
-    var base = radiant.Rjson;
+    var base = lightstore.Rjson;
 
     /**
-     * @name radiant.KeyValueStore.create
+     * @name lightstore.KeyValueStore.create
      * @function
      * @param {string} fileName
-     * @returns {radiant.KeyValueStore}
+     * @returns {lightstore.KeyValueStore}
      */
 
     /**
      * @class
-     * @extends radiant.Rjson
+     * @extends lightstore.Rjson
      */
-    radiant.KeyValueStore = base.extend()
-        .addConstants(/** @lends radiant.KeyValueStore */{
+    lightstore.KeyValueStore = base.extend()
+        .addConstants(/** @lends lightstore.KeyValueStore */{
             ROOT_PATH: sntls.Path.create('root')
         })
-        .addPrivateMethods(/** @lends radiant.KeyValueStore# */{
+        .addPrivateMethods(/** @lends lightstore.KeyValueStore# */{
             /**
              * Compacts buffer (serialized paths - values) to a tree with one (root) key.
              * @param {object} json
              * @return {object}
              * @private
-             * @memberOf radiant.KeyValueStore
+             * @memberOf lightstore.KeyValueStore
              */
             _compactBuffer: function (json) {
                 var input = sntls.Collection.create(json),
@@ -49,11 +49,11 @@ troop.postpone(radiant, 'KeyValueStore', function () {
                 handler(err, this._compactBuffer(json));
             }
         })
-        .addMethods(/** @lends radiant.KeyValueStore# */{
+        .addMethods(/** @lends lightstore.KeyValueStore# */{
             /**
              * Reads datastore contents and passes it to handler.
              * @param {function} handler
-             * @returns {radiant.KeyValueStore}
+             * @returns {lightstore.KeyValueStore}
              */
             read: function (handler) {
                 base.read(this._onRead.bind(this, handler));
@@ -65,7 +65,7 @@ troop.postpone(radiant, 'KeyValueStore', function () {
              * @param {sntls.Path} path
              * @param {*} value
              * @param {function} [handler]
-             * @returns {radiant.KeyValueStore}
+             * @returns {lightstore.KeyValueStore}
              */
             write: function (path, value, handler) {
                 var buffer = {},

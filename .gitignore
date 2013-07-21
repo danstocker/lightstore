@@ -3,4 +3,4 @@
 /doc/
 /node_modules/
 /*.tgz
-/radiant.js
+/lightstore.js
