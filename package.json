@@ -2,7 +2,11 @@
     "name"           : "radiant",
     "version"        : "0.1.2",
     "description"    : "JSON key-value store",
-    "keywords"       : ["json", "datastore", "key-value"],
+    "keywords"       : [
+        "json",
+        "datastore",
+        "key-value"
+    ],
     "author"         : "Dan Stocker <dan@kwaia.com>",
     "repository"     : {
         "type": "git",
@@ -10,7 +14,8 @@
     },
     "dependencies"   : {
         "dessert": "~0.3.2",
-        "troop"  : "~0.5.1"
+        "troop"  : "~0.5.1",
+        "sntls"  : "~0.13.0"
     },
     "devDependencies": {
         "grunt"               : "~0.4.1",
