@@ -4,16 +4,20 @@
  * RJSON may contain the same key several times over. Upon parsing,
  * the last value (which is also the latest) will be used.
  */
+/*global radiant */
 /*jshint node:true */
-var Rjson;
-(function () {
+troop.postpone(radiant, 'Rjson', function () {
     'use strict';
 
     var dessert = require('dessert'),
         troop = require('troop'),
         fs = require('fs');
 
-    Rjson = troop.Base.extend()
+    /**
+     * @class
+     * @extends troop.Base
+     */
+    radiant.Rjson = troop.Base.extend()
         .addPrivateMethods(/** @lends Rjson# */{
             /**
              * Called when data is read from disk.
@@ -125,6 +129,4 @@ var Rjson;
                 return this;
             }
         });
-
-    module.exports = Rjson;
-}());
+});

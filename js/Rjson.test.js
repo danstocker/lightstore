@@ -1,5 +1,5 @@
 /*global module, test, expect, raises, ok, equal */
-/*global troop, Rjson */
+/*global radiant */
 /*jshint node:true */
 (function (fs) {
     'use strict';
@@ -7,12 +7,12 @@
     module("Rjson");
 
     test("Creation", function () {
-        var rjson = Rjson.create('test.foo');
+        var rjson = radiant.Rjson.create('test.foo');
         equal(rjson.fileName, 'test.foo', "File name initialized");
     });
 
     test("Reading", function () {
-        var rjson = Rjson.create('test.foo');
+        var rjson = radiant.Rjson.create('test.foo');
 
         expect(2);
 
@@ -32,7 +32,7 @@
     });
 
     test("Writing (appending)", function () {
-        var rjson = Rjson.create('test.foo');
+        var rjson = radiant.Rjson.create('test.foo');
 
         expect(3);
 
@@ -56,11 +56,11 @@
     });
 
     test("Compaction", function () {
-        var rjson = Rjson.create('test.foo');
+        var rjson = radiant.Rjson.create('test.foo');
 
         expect(2);
 
-        Rjson.addMocks({
+        radiant.Rjson.addMocks({
             read: function (handler) {
                 ok(typeof handler === 'function', "");
             }
@@ -72,6 +72,6 @@
 
         rjson.compact();
 
-        Rjson.removeMocks();
+        radiant.Rjson.removeMocks();
     });
 }(require('fs')));

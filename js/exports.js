@@ -1,8 +1,8 @@
 /**
  * Library exports
  */
+/*global radiant */
 /*jshint node:true */
-/** @namespace */
-var radiant = module.exports = {
-    Rjson: require('./Rjson')
-};
+if (typeof module === 'object') {
+    module.exports = radiant;
+}
