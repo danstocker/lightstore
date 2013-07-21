@@ -6,34 +6,43 @@
 
     module("KeyValueStore");
 
-    test("Rjson to tree conversion", function () {
-        var rjson = {
-            "test>path"      : "hello",
-            "test>foo"       : 1,
-            "foo>bar>baz"    : {hello: "world"},
-            "test>path>hello": "all",
-            "foo>bar>baz>boo": 1234
-        };
-
-        deepEqual(
-            radiant.KeyValueStore._convertToTree(rjson),
-            {
-                test: {
-                    foo : 1,
-                    path: {
-                        hello: "all"
-                    }
-                },
-                foo : {
-                    bar: {
-                        baz: {
-                            hello: "world",
-                            boo  : 1234
+    test("Rjson buffer consolidation", function () {
+        var rjsonFragmented = {
+                "root>test>path"      : "hello",
+                "root>test>foo"       : 1,
+                "root>foo>bar>baz"    : {hello: "world"},
+                "root>test>path>hello": "all",
+                "root>foo>bar>baz>boo": 1234
+            },
+            rjsonCompacted = {
+                "root": {
+                    test: {
+                        foo : 1,
+                        path: {
+                            hello: "all"
+                        }
+                    },
+                    foo : {
+                        bar: {
+                            baz: {
+                                hello: "world",
+                                boo  : 1234
+                            }
                         }
                     }
                 }
-            },
-            "Rjson converted to tree"
+            };
+
+        deepEqual(
+            radiant.KeyValueStore._compactBuffer(rjsonFragmented),
+            rjsonCompacted,
+            "Fragmented RJSON compacted"
+        );
+
+        deepEqual(
+            radiant.KeyValueStore._compactBuffer(rjsonCompacted),
+            rjsonCompacted,
+            "Compacted RJSON compacted again"
         );
     });
 
@@ -70,7 +79,7 @@
                 deepEqual(
                     buffer,
                     {
-                        "test>path": {foo: "bar"}
+                        "root>test>path": {foo: "bar"}
                     },
                     "Buffer containing path/value pair"
                 );

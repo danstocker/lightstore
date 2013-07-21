@@ -16,15 +16,18 @@ troop.postpone(radiant, 'KeyValueStore', function () {
      * @extends radiant.Rjson
      */
     radiant.KeyValueStore = base.extend()
+        .addConstants(/** @lends radiant.KeyValueStore */{
+            ROOT_PATH: sntls.Path.create('root')
+        })
         .addPrivateMethods(/** @lends radiant.KeyValueStore# */{
             /**
-             * Converts contents (serialized paths - values) to a proper tree.
+             * Compacts buffer (serialized paths - values) to a tree with one (root) key.
              * @param {object} json
              * @return {object}
              * @private
              * @memberOf radiant.KeyValueStore
              */
-            _convertToTree: function (json) {
+            _compactBuffer: function (json) {
                 var input = sntls.Collection.create(json),
                     output = sntls.Tree.create();
 
@@ -43,7 +46,7 @@ troop.postpone(radiant, 'KeyValueStore', function () {
              * @private
              */
             _onRead: function (handler, err, json) {
-                handler(err, this._convertToTree(json));
+                handler(err, this._compactBuffer(json));
             }
         })
         .addMethods(/** @lends radiant.KeyValueStore# */{
@@ -65,9 +68,12 @@ troop.postpone(radiant, 'KeyValueStore', function () {
              * @returns {radiant.KeyValueStore}
              */
             write: function (path, value, handler) {
-                var buffer = {};
+                var buffer = {},
+                    key = path
+                        .prepend(this.ROOT_PATH)
+                        .toString();
 
-                buffer[path.toString()] = value;
+                buffer[key] = value;
 
                 base.write.call(this, buffer, handler);
 
