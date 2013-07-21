@@ -70,7 +70,7 @@
                 deepEqual(
                     buffer,
                     {
-                        "test>path": '{"foo":"bar"}'
+                        "test>path": {foo: "bar"}
                     },
                     "Buffer containing path/value pair"
                 );

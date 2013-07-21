@@ -67,7 +67,7 @@ troop.postpone(radiant, 'KeyValueStore', function () {
             write: function (path, value, handler) {
                 var buffer = {};
 
-                buffer[path.toString()] = JSON.stringify(value);
+                buffer[path.toString()] = value;
 
                 base.write.call(this, buffer, handler);
 
