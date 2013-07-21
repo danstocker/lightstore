@@ -4,14 +4,12 @@
  * RJSON may contain the same key several times over. Upon parsing,
  * the last value (which is also the latest) will be used.
  */
-/*global troop, radiant */
+/*global dessert, troop, radiant */
 /*jshint node:true */
 troop.postpone(radiant, 'Rjson', function () {
     'use strict';
 
-    var dessert = require('dessert'),
-        troop = require('troop'),
-        fs = require('fs');
+    var fs = require('fs');
 
     /**
      * @name radiant.Rjson.create
