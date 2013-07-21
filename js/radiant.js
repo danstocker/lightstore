@@ -1,14 +1,12 @@
 /**
  * Command line tool for accessing RJSON databases.
  */
-/*global radiant */
 /*jshint node:true */
-'use strict';
-
-var Rjson = require('./Rjson');
-
 (function () {
-    var stdout = process.stdout,
+    'use strict';
+
+    var Rjson = require('./Rjson'),
+        stdout = process.stdout,
         argv = process.argv,
         fileName = argv[2],
         rjson = Rjson.create(fileName),

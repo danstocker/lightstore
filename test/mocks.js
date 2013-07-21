@@ -1,12 +1,14 @@
 /*global troop */
-/*jshint node:true */
-'use strict';
+/*jshint browser:true, node:true */
+(function () {
+    'use strict';
 
-var exports = troop.Base.extend()
-    .addPublic({
-        fs: troop.Base.extend()
-    });
+    var modules = troop.Base.extend()
+        .addPublic({
+            fs: troop.Base.extend()
+        });
 
-function require() {
-    return exports;
-}
+    window.require = function (module) {
+        return window[module.split(/\W+/).pop()] || modules[module];
+    };
+}());
