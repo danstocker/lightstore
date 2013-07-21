@@ -4,7 +4,7 @@
  * RJSON may contain the same key several times over. Upon parsing,
  * the last value (which is also the latest) will be used.
  */
-/*global radiant */
+/*global troop, radiant */
 /*jshint node:true */
 troop.postpone(radiant, 'Rjson', function () {
     'use strict';
@@ -14,11 +14,18 @@ troop.postpone(radiant, 'Rjson', function () {
         fs = require('fs');
 
     /**
+     * @name radiant.Rjson.create
+     * @function
+     * @param {string} fileName Name of database file.
+     * @returns {radiant.Rjson}
+     */
+
+    /**
      * @class
      * @extends troop.Base
      */
     radiant.Rjson = troop.Base.extend()
-        .addPrivateMethods(/** @lends Rjson# */{
+        .addPrivateMethods(/** @lends radiant.Rjson# */{
             /**
              * Called when data is read from disk.
              * @param {function} handler
@@ -65,7 +72,7 @@ troop.postpone(radiant, 'Rjson', function () {
                 }
             }
         })
-        .addMethods(/** @lends Rjson# */{
+        .addMethods(/** @lends radiant.Rjson# */{
             /**
              * Initializes RJSON.
              * @param {string} fileName Name of database file.
@@ -81,7 +88,7 @@ troop.postpone(radiant, 'Rjson', function () {
             /**
              * Reads the whole RJSON database file.
              * @param {function} handler Callback
-             * @returns {Rjson}
+             * @returns {radiant.Rjson}
              */
             read: function (handler) {
                 dessert.isFunction(handler, "Invalid read handler");
@@ -97,7 +104,7 @@ troop.postpone(radiant, 'Rjson', function () {
             /**
              * Compacts database files.
              * @param {function} [handler] Callback
-             * @returns {Rjson}
+             * @returns {radiant.Rjson}
              */
             compact: function (handler) {
                 dessert.isFunctionOptional(handler, "Invalid compaction handler");
@@ -111,7 +118,7 @@ troop.postpone(radiant, 'Rjson', function () {
              * Writes object to database.
              * @param {object} data
              * @param {function} [handler] Callback
-             * @returns {Rjson}
+             * @returns {radiant.Rjson}
              */
             write: function (data, handler) {
                 dessert
