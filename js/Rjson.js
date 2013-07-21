@@ -14,6 +14,53 @@ var Rjson;
         fs = require('fs');
 
     Rjson = troop.Base.extend()
+        .addPrivateMethods(/** @lends Rjson# */{
+            /**
+             * Called when data is read from disk.
+             * @param {function} handler
+             * @param {object} err
+             * @param {object} data
+             * @private
+             */
+            _onData: function (handler, err, data) {
+                var parsed;
+
+                if (!err) {
+                    try {
+                        parsed = JSON.parse('{' + data.toString().slice(0, -1) + '}');
+                    } catch (e) {
+                        err = new Error("Corrupted database contents.");
+                    }
+                }
+
+                handler.call(this, err, parsed);
+            },
+
+            /**
+             * Called when data is loaded and is ready to be compacted.
+             * Saves data back to disk immediately on success,
+             * calls handler (if any) immediately on error.
+             * @param {function} handler
+             * @param {object} err
+             * @param {object} data
+             * @private
+             */
+            _onCompact: function (handler, err, data) {
+                if (err) {
+                    if (typeof handler === 'function') {
+                        handler.call(this, err);
+                    }
+                } else {
+                    fs.writeFile(
+                        this.fileName,
+                        JSON.stringify(data).slice(1, -1) + ',',
+                        typeof handler === 'function' ?
+                            handler.bind(this) :
+                            undefined
+                    );
+                }
+            }
+        })
         .addMethods(/** @lends Rjson# */{
             /**
              * Initializes RJSON.
@@ -76,53 +123,6 @@ var Rjson;
                 );
 
                 return this;
-            }
-        })
-        .addPrivateMethods(/** @lends Rjson# */{
-            /**
-             * Called when data is read from disk.
-             * @param {function} handler
-             * @param {object} err
-             * @param {object} data
-             * @private
-             */
-            _onData: function (handler, err, data) {
-                var parsed;
-
-                if (!err) {
-                    try {
-                        parsed = JSON.parse('{' + data.toString().slice(0, -1) + '}');
-                    } catch (e) {
-                        err = new Error("Corrupted database contents.");
-                    }
-                }
-
-                handler.call(this, err, parsed);
-            },
-
-            /**
-             * Called when data is loaded and is ready to be compacted.
-             * Saves data back to disk immediately on success,
-             * calls handler (if any) immediately on error.
-             * @param {function} handler
-             * @param {object} err
-             * @param {object} data
-             * @private
-             */
-            _onCompact: function (handler, err, data) {
-                if (err) {
-                    if (typeof handler === 'function') {
-                        handler.call(this, err);
-                    }
-                } else {
-                    fs.writeFile(
-                        this.fileName,
-                        JSON.stringify(data).slice(1, -1) + ',',
-                        typeof handler === 'function' ?
-                            handler.bind(this) :
-                            undefined
-                    );
-                }
             }
         });
 
