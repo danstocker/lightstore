@@ -28,12 +28,14 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
              * @memberOf lightstore.KeyValueStore
              */
             _compactBuffer: function (json) {
-                var input = sntls.Collection.create(json),
-                    output = sntls.Tree.create();
+                var output = sntls.Tree.create(),
+                    keys = Object.keys(json),
+                    i, key;
 
-                input.forEachItem(function (value, pathStr) {
-                    output.setNode(pathStr.toPath(), value);
-                });
+                for (i = 0; i < keys.length; i++) {
+                    key = keys[i];
+                    output.setNode(key.toPath(), json[key]);
+                }
 
                 return output.items;
             },
