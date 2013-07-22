@@ -58,7 +58,7 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
              * @returns {lightstore.KeyValueStore}
              */
             read: function (handler) {
-                base.read(this._onRead.bind(this, handler));
+                base.read.call(this, this._onRead.bind(this, handler));
                 return this;
             },
 
