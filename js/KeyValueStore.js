@@ -17,6 +17,14 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
      */
     lightstore.KeyValueStore = base.extend()
         .addConstants(/** @lends lightstore.KeyValueStore */{
+            /**
+             * @type {string}
+             */
+            ROOT_KEY: 'root',
+
+            /**
+             * @type {sntls.Path}
+             */
             ROOT_PATH: sntls.Path.create('root')
         })
         .addPrivateMethods(/** @lends lightstore.KeyValueStore# */{
@@ -48,7 +56,7 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
              * @private
              */
             _onRead: function (handler, err, json) {
-                handler(err, this._compactBuffer(json));
+                handler(err, this._compactBuffer(json)[this.ROOT_KEY]);
             }
         })
         .addMethods(/** @lends lightstore.KeyValueStore# */{

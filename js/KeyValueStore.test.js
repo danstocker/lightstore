@@ -46,6 +46,27 @@
         );
     });
 
+    test("Read handler", function () {
+        expect(2);
+
+        var store = /** @type {lightstore.KeyValueStore} */
+                lightstore.KeyValueStore.create('foo.rjson'),
+            rawContents = {root: "foo"};
+
+        store.addMocks({
+            _compactBuffer: function (json) {
+                strictEqual(json, rawContents, "Original data passed for compaction");
+                return json;
+            }
+        });
+
+        function onRead(err, json) {
+            equal(json, "foo", "Root node");
+        }
+
+        store._onRead(onRead, {}, rawContents);
+    });
+
     test("Read", function () {
         expect(2);
 
