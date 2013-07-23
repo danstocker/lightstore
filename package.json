@@ -8,6 +8,8 @@
         "key-value"
     ],
     "author"         : "Dan Stocker <dan@kwaia.com>",
+    "copyright"      : "Copyright (c) 2012-2013 Dan Stocker",
+    "license"        : "MIT",
     "repository"     : {
         "type": "git",
         "url" : "https://github.com/danstocker/lightstore.git"
