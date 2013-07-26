@@ -67,6 +67,19 @@
         store._onRead(onRead, {}, rawContents);
     });
 
+    test("Read handler w/ empty file", function () {
+        expect(1);
+
+        var store = /** @type {lightstore.KeyValueStore} */
+                lightstore.KeyValueStore.create('foo.rjson');
+
+        function onRead(err, json) {
+            deepEqual(json, {}, "Root node from empty file");
+        }
+
+        store._onRead(onRead, {});
+    });
+
     test("Read", function () {
         expect(2);
 
