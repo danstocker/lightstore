@@ -7,7 +7,18 @@
     module("PersistedTree");
 
     test("Instantiation", function () {
-        var fs = require('fs');
+        var treeStore = /** @type {lightstore.PersistedTree} */
+            lightstore.PersistedTree.create('fileName');
+
+        ok(treeStore._store.isA(lightstore.KeyValueStore), "Store member assigned");
+    });
+
+    test("Reading", function () {
+        expect(2);
+
+        var fs = require('fs'),
+            treeStore = /** @type {lightstore.PersistedTree} */
+                lightstore.PersistedTree.create('fileName');
 
         fs.addMocks({
             readFile: function (fileName, handler) {
@@ -15,8 +26,9 @@
             }
         });
 
-        var treeStore = /** @type {lightstore.PersistedTree} */
-            lightstore.PersistedTree.create('fileName');
+        treeStore.read(function (err, json) {
+            deepEqual(json, {hello: "world"}, "File contents read");
+        });
 
         fs.removeMocks();
 
@@ -34,7 +46,8 @@
         });
 
         var treeStore = /** @type {lightstore.PersistedTree} */
-                lightstore.PersistedTree.create('fileName'),
+                lightstore.PersistedTree.create('fileName')
+                    .read(),
             destinationPath = 'foo>bar'.toPath();
 
         lightstore.KeyValueStore.removeMocks();

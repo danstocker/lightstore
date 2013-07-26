@@ -20,12 +20,16 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             /**
              * Called when datastore finished loading.
              * Assigns input json to Tree buffer.
+             * @param {function} handler
              * @param {object} err
              * @param {object} json
              * @private
              */
-            _onRead: function (err, json) {
+            _onRead: function (handler, err, json) {
                 this.items = json;
+                if (handler) {
+                    handler(err, json);
+                }
             }
         })
         .addMethods(/** @lends lightstore.PersistedTree# */{
@@ -40,8 +44,16 @@ troop.postpone(lightstore, 'PersistedTree', function () {
                  * @type {lightstore.KeyValueStore}
                  * @private
                  */
-                this._store = lightstore.KeyValueStore.create(fileName)
-                    .read(this._onRead.bind(this));
+                this._store = lightstore.KeyValueStore.create(fileName);
+            },
+
+            /**
+             * @param {function} handler
+             * @returns {lightstore.PersistedTree}
+             */
+            read: function (handler) {
+                this._store.read(this._onRead.bind(this, handler));
+                return this;
             },
 
             /**
