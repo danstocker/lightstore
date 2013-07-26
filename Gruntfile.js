@@ -7,6 +7,7 @@ module.exports = function (grunt) {
             'js/namespace.js',
             'js/Rjson.js',
             'js/KeyValueStore.js',
+            'js/PersistedTree.js',
             'js/exports.js'
         ],
 
