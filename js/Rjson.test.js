@@ -14,10 +14,6 @@
 
         rjson = lightstore.Rjson.create('test.foo');
         equal(rjson.fileName, 'test.foo', "File name initialized");
-        equal(rjson.fileType, rjson.TYPE_RJSON, "File type initialized to RJSON");
-
-        rjson = lightstore.Rjson.create('test.json');
-        equal(rjson.fileType, rjson.TYPE_JSON, "File type initialized to plain JSON");
     });
 
     test("General reading", function () {
@@ -49,25 +45,6 @@
             readFile: function (fileName, handler) {
                 // returns RJSON contents
                 handler(undefined, '"hello":"world",');
-            }
-        });
-
-        rjson.read(function (data) {
-            deepEqual(data, {hello: "world"}, "Rjson contents");
-        });
-
-        fs.removeMocks();
-    });
-
-    test("Reading plain JSON", function () {
-        expect(1);
-
-        var rjson = lightstore.Rjson.create('test.json');
-
-        fs.addMocks({
-            readFile: function (fileName, handler) {
-                // returns RJSON contents
-                handler(undefined, '{"hello":"world"}');
             }
         });
 

@@ -3,8 +3,7 @@
 troop.postpone(lightstore, 'Rjson', function () {
     'use strict';
 
-    var path = require('path'),
-        fs = require('fs');
+    var fs = require('fs');
 
     /**
      * @name lightstore.Rjson.create
@@ -21,32 +20,7 @@ troop.postpone(lightstore, 'Rjson', function () {
      * @extends troop.Base
      */
     lightstore.Rjson = troop.Base.extend()
-        .addConstants(/** @lends lightstore.Rjson */{
-            TYPE_JSON : 'JSON', // indicates plain JSON
-            TYPE_RJSON: 'RJSON' // indicates redundant JSON (RJSON)
-        })
         .addPrivateMethods(/** @lends lightstore.Rjson# */{
-            /**
-             * Called when plain JSON data is read from disk.
-             * @param {function} handler
-             * @param {object} err
-             * @param {object} data
-             * @private
-             */
-            _onJsonRead: function (handler, err, data) {
-                dessert.assert(!err, "Error reading file", err);
-
-                var parsed;
-
-                try {
-                    parsed = JSON.parse(data.toString());
-                } catch (e) {
-                    dessert.assert(false, "Invalid JSON");
-                }
-
-                handler.call(this, parsed);
-            },
-
             /**
              * Called when data is read from disk.
              * @param {function} handler
@@ -98,12 +72,6 @@ troop.postpone(lightstore, 'Rjson', function () {
                  * @type {string}
                  */
                 this.fileName = fileName;
-
-                var ext = path.extname(this.fileName);
-
-                this.fileType = ext === '.json' ?
-                    this.TYPE_JSON :
-                    this.TYPE_RJSON;
             },
 
             /**
@@ -116,9 +84,7 @@ troop.postpone(lightstore, 'Rjson', function () {
 
                 fs.readFile(
                     this.fileName,
-                    this.fileType === this.TYPE_JSON ?
-                        this._onJsonRead.bind(this, handler) :
-                        this._onRjsonRead.bind(this, handler)
+                    this._onRjsonRead.bind(this, handler)
                 );
 
                 return this;
