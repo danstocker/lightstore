@@ -9,9 +9,15 @@
 
     module("Rjson");
 
-    test("Creation", function () {
-        var rjson = lightstore.Rjson.create('test.foo');
+    test("Instantiation", function () {
+        var rjson;
+
+        rjson = lightstore.Rjson.create('test.foo');
         equal(rjson.fileName, 'test.foo', "File name initialized");
+        equal(rjson.fileType, rjson.TYPE_RJSON, "File type initialized to RJSON");
+
+        rjson = lightstore.Rjson.create('test.json');
+        equal(rjson.fileType, rjson.TYPE_JSON, "File type initialized to plain JSON");
     });
 
     test("General reading", function () {
