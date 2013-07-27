@@ -21,14 +21,13 @@ troop.postpone(lightstore, 'PersistedTree', function () {
              * Called when datastore finished loading.
              * Assigns input json to Tree buffer.
              * @param {function} handler
-             * @param {object} err
              * @param {object} json
              * @private
              */
-            _onRead: function (handler, err, json) {
+            _onRead: function (handler, json) {
                 this.items = json;
                 if (handler) {
-                    handler(err, json);
+                    handler(json);
                 }
             }
         })

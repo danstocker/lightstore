@@ -60,11 +60,11 @@
             }
         });
 
-        function onRead(err, json) {
+        function onRead(json) {
             equal(json, "foo", "Root node");
         }
 
-        store._onRead(onRead, {}, rawContents);
+        store._onRead(onRead, rawContents);
     });
 
     test("Read handler w/ empty file", function () {
@@ -73,11 +73,11 @@
         var store = /** @type {lightstore.KeyValueStore} */
                 lightstore.KeyValueStore.create('foo.rjson');
 
-        function onRead(err, json) {
+        function onRead(json) {
             deepEqual(json, {}, "Root node from empty file");
         }
 
-        store._onRead(onRead, {});
+        store._onRead(onRead);
     });
 
     test("Read", function () {

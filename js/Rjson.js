@@ -1,9 +1,3 @@
-/**
- * Redundant JSON I/O
- *
- * RJSON may contain the same key several times over. Upon parsing,
- * the last value (which is also the latest) will be used.
- */
 /*global dessert, troop, lightstore */
 /*jshint node:true */
 troop.postpone(lightstore, 'Rjson', function () {
@@ -20,6 +14,9 @@ troop.postpone(lightstore, 'Rjson', function () {
      */
 
     /**
+     * Redundant JSON I/O
+     * May contain the same key several times over. Upon parsing,
+     * the last value (which is also the latest) will be used.
      * @class
      * @extends troop.Base
      */
@@ -33,17 +30,17 @@ troop.postpone(lightstore, 'Rjson', function () {
              * @private
              */
             _onJsonRead: function (handler, err, data) {
+                dessert.assert(!err, "Error reading file", err);
+
                 var parsed;
 
-                if (!err) {
-                    try {
-                        parsed = JSON.parse(data.toString());
-                    } catch (e) {
-                        err = new Error("Corrupted database contents.");
-                    }
+                try {
+                    parsed = JSON.parse(data.toString());
+                } catch (e) {
+                    dessert.assert(false, "Invalid JSON");
                 }
 
-                handler.call(this, err, parsed);
+                handler.call(this, parsed);
             },
 
             /**
@@ -54,17 +51,17 @@ troop.postpone(lightstore, 'Rjson', function () {
              * @private
              */
             _onRjsonRead: function (handler, err, data) {
+                dessert.assert(!err, "Error reading file", err);
+
                 var parsed;
 
-                if (!err) {
-                    try {
-                        parsed = JSON.parse('{' + data.toString().slice(0, -1) + '}');
-                    } catch (e) {
-                        err = new Error("Corrupted database contents.");
-                    }
+                try {
+                    parsed = JSON.parse('{' + data.toString().slice(0, -1) + '}');
+                } catch (e) {
+                    dessert.assert(false, "Invalid RJSON");
                 }
 
-                handler.call(this, err, parsed);
+                handler.call(this, parsed);
             },
 
             /**
@@ -77,19 +74,13 @@ troop.postpone(lightstore, 'Rjson', function () {
              * @private
              */
             _onCompact: function (handler, err, data) {
-                if (err) {
-                    if (typeof handler === 'function') {
-                        handler.call(this, err);
-                    }
-                } else {
-                    fs.writeFile(
-                        this.fileName,
-                        JSON.stringify(data).slice(1, -1) + ',',
-                        typeof handler === 'function' ?
-                            handler.bind(this) :
-                            undefined
-                    );
-                }
+                dessert.assert(!err, "Error reading file", err);
+
+                fs.writeFile(
+                    this.fileName,
+                    JSON.stringify(data).slice(1, -1) + ',',
+                    handler.bind(this)
+                );
             }
         })
         .addMethods(/** @lends lightstore.Rjson# */{
