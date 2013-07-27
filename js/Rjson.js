@@ -9,7 +9,8 @@
 troop.postpone(lightstore, 'Rjson', function () {
     'use strict';
 
-    var fs = require('fs');
+    var path = require('path'),
+        fs = require('fs');
 
     /**
      * @name lightstore.Rjson.create
@@ -25,13 +26,34 @@ troop.postpone(lightstore, 'Rjson', function () {
     lightstore.Rjson = troop.Base.extend()
         .addPrivateMethods(/** @lends lightstore.Rjson# */{
             /**
+             * Called when plain JSON data is read from disk.
+             * @param {function} handler
+             * @param {object} err
+             * @param {object} data
+             * @private
+             */
+            _onJsonRead: function (handler, err, data) {
+                var parsed;
+
+                if (!err) {
+                    try {
+                        parsed = JSON.parse(data.toString());
+                    } catch (e) {
+                        err = new Error("Corrupted database contents.");
+                    }
+                }
+
+                handler.call(this, err, parsed);
+            },
+
+            /**
              * Called when data is read from disk.
              * @param {function} handler
              * @param {object} err
              * @param {object} data
              * @private
              */
-            _onData: function (handler, err, data) {
+            _onRjsonRead: function (handler, err, data) {
                 var parsed;
 
                 if (!err) {
@@ -91,9 +113,13 @@ troop.postpone(lightstore, 'Rjson', function () {
             read: function (handler) {
                 dessert.isFunction(handler, "Invalid read handler");
 
+                var ext = path.extname(this.fileName);
+
                 fs.readFile(
                     this.fileName,
-                    this._onData.bind(this, handler)
+                    ext === '.json' ?
+                        this._onJsonRead.bind(this, handler) :
+                        this._onRjsonRead.bind(this, handler)
                 );
 
                 return this;

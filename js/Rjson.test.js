@@ -1,8 +1,11 @@
-/*global module, test, expect, raises, ok, equal */
+/*global module, test, expect, raises, ok, equal, deepEqual */
 /*global lightstore */
 /*jshint node:true */
-(function (fs) {
+(function () {
     'use strict';
+
+    var fs = require('fs'),
+        path = require('path');
 
     module("Rjson");
 
@@ -11,7 +14,7 @@
         equal(rjson.fileName, 'test.foo', "File name initialized");
     });
 
-    test("Reading", function () {
+    test("General reading", function () {
         var rjson = lightstore.Rjson.create('test.foo');
 
         expect(2);
@@ -27,6 +30,44 @@
         });
 
         rjson.read(function () {});
+
+        fs.removeMocks();
+    });
+
+    test("Reading RJSON", function () {
+        expect(1);
+
+        var rjson = lightstore.Rjson.create('test.ls');
+
+        fs.addMocks({
+            readFile: function (fileName, handler) {
+                // returns RJSON contents
+                handler(undefined, '"hello":"world",');
+            }
+        });
+
+        rjson.read(function (err, data) {
+            deepEqual(data, {hello: "world"}, "Rjson contents");
+        });
+
+        fs.removeMocks();
+    });
+
+    test("Reading plain JSON", function () {
+        expect(1);
+
+        var rjson = lightstore.Rjson.create('test.json');
+
+        fs.addMocks({
+            readFile: function (fileName, handler) {
+                // returns RJSON contents
+                handler(undefined, '{"hello":"world"}');
+            }
+        });
+
+        rjson.read(function (err, data) {
+            deepEqual(data, {hello: "world"}, "Rjson contents");
+        });
 
         fs.removeMocks();
     });
@@ -74,4 +115,4 @@
 
         lightstore.Rjson.removeMocks();
     });
-}(require('fs')));
+}());
