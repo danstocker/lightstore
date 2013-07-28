@@ -40,10 +40,10 @@ troop.postpone(lightstore, 'PersistedTree', function () {
                 base.init.call(this);
 
                 /**
-                 * @type {lightstore.KeyValueStore}
+                 * @type {lightstore.File}
                  * @private
                  */
-                this._store = lightstore.KeyValueStore.create(fileName);
+                this._store = lightstore.File.create(fileName);
             },
 
             /**
@@ -63,8 +63,11 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             setNode: function (path, value) {
                 base.setNode.call(this, path, value);
 
-                // persisting node
-                this._store.write(path, value);
+                var store = this._store;
+                if (store.isA(lightstore.KeyValueStore)) {
+                    // persisting node
+                    store.write(path, value);
+                }
 
                 return this;
             }

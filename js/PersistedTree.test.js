@@ -8,7 +8,7 @@
 
     test("Instantiation", function () {
         var treeStore = /** @type {lightstore.PersistedTree} */
-            lightstore.PersistedTree.create('fileName');
+            lightstore.PersistedTree.create('test.ls');
 
         ok(treeStore._store.isA(lightstore.KeyValueStore), "Store member assigned");
     });
@@ -18,7 +18,7 @@
 
         var fs = require('fs'),
             treeStore = /** @type {lightstore.PersistedTree} */
-                lightstore.PersistedTree.create('fileName');
+                lightstore.PersistedTree.create('test.ls');
 
         fs.addMocks({
             readFile: function (fileName, handler) {
@@ -46,7 +46,7 @@
         });
 
         var treeStore = /** @type {lightstore.PersistedTree} */
-                lightstore.PersistedTree.create('fileName')
+                lightstore.PersistedTree.create('test.ls')
                     .read(),
             destinationPath = 'foo>bar'.toPath();
 
