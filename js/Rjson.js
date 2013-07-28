@@ -29,17 +29,17 @@ troop.postpone(lightstore, 'Rjson', function () {
              * @private
              */
             _onRjsonRead: function (handler, err, data) {
-                dessert.assert(!err, "Error reading file", err);
-
                 var parsed;
 
-                try {
-                    parsed = JSON.parse('{' + data.toString().slice(0, -1) + '}');
-                } catch (e) {
-                    dessert.assert(false, "Invalid RJSON");
+                if (!err) {
+                    try {
+                        parsed = JSON.parse('{' + data.toString().slice(0, -1) + '}');
+                    } catch (e) {
+                        dessert.assert(false, "Invalid RJSON");
+                    }
                 }
 
-                handler.call(this, parsed);
+                handler(err, parsed);
             },
 
             /**
@@ -47,18 +47,20 @@ troop.postpone(lightstore, 'Rjson', function () {
              * Saves data back to disk immediately on success,
              * calls handler (if any) immediately on error.
              * @param {function} handler
-             * @param {object} err
+             * @param {Error} err
              * @param {object} data
              * @private
              */
             _onCompact: function (handler, err, data) {
-                dessert.assert(!err, "Error reading file", err);
-
-                fs.writeFile(
-                    this.fileName,
-                    JSON.stringify(data).slice(1, -1) + ',',
-                    handler.bind(this)
-                );
+                if (!err) {
+                    fs.writeFile(
+                        this.fileName,
+                        JSON.stringify(data).slice(1, -1) + ',',
+                        handler
+                    );
+                } else if (handler) {
+                    handler(err, data);
+                }
             }
         })
         .addMethods(/** @lends lightstore.Rjson# */{
@@ -105,9 +107,7 @@ troop.postpone(lightstore, 'Rjson', function () {
                 fs.appendFile(
                     this.fileName,
                     JSON.stringify(data).slice(1, -1) + ',',
-                    typeof handler === 'function' ?
-                        handler.bind(this) :
-                        undefined
+                    handler
                 );
 
                 return this;

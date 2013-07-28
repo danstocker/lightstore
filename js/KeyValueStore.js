@@ -51,11 +51,12 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
             /**
              * Called when Rjson finishes loading.
              * @param {function} handler
+             * @param {Error} err
              * @param {object} json
              * @private
              */
-            _onRead: function (handler, json) {
-                handler.call(this, json ? this._compactBuffer(json)[this.ROOT_KEY] : {});
+            _onRead: function (handler, err, json) {
+                handler(err, json ? this._compactBuffer(json)[this.ROOT_KEY] : {});
             }
         })
         .addMethods(/** @lends lightstore.KeyValueStore# */{

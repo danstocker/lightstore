@@ -48,7 +48,7 @@
             }
         });
 
-        rjson.read(function (data) {
+        rjson.read(function (err, data) {
             deepEqual(data, {hello: "world"}, "Rjson contents");
         });
 

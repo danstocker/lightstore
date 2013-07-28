@@ -22,22 +22,22 @@ troop.postpone(lightstore, 'Json', function () {
             /**
              * Called when plain JSON data is read from disk.
              * @param {function} handler
-             * @param {object} err
+             * @param {Error} err
              * @param {object} data
              * @private
              */
             _onJsonRead: function (handler, err, data) {
-                dessert.assert(!err, "Error reading file", err);
-
                 var parsed;
 
-                try {
-                    parsed = JSON.parse(data.toString());
-                } catch (e) {
-                    dessert.assert(false, "Invalid JSON");
+                if (!err) {
+                    try {
+                        parsed = JSON.parse(data.toString());
+                    } catch (e) {
+                        dessert.assert(false, "Invalid JSON");
+                    }
                 }
 
-                handler.call(this, parsed);
+                handler(err, parsed);
             }
         })
         .addMethods(/** @lends lightstore.Json# */{

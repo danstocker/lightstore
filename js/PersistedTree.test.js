@@ -33,7 +33,7 @@
             }
         });
 
-        treeStore.load(function (json) {
+        treeStore.load(function (err, json) {
             deepEqual(json, {hello: "world"}, "File contents read");
         });
 
