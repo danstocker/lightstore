@@ -50,7 +50,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
              * @param {function} handler
              * @returns {lightstore.PersistedTree}
              */
-            read: function (handler) {
+            load: function (handler) {
                 this._store.read(this._onRead.bind(this, handler));
                 return this;
             },

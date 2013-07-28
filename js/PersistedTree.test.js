@@ -26,7 +26,7 @@
             }
         });
 
-        treeStore.read(function (json) {
+        treeStore.load(function (json) {
             deepEqual(json, {hello: "world"}, "File contents read");
         });
 
@@ -71,7 +71,7 @@
 
         var treeStore = /** @type {lightstore.PersistedTree} */
                 lightstore.PersistedTree.create('test.ls')
-                    .read(),
+                    .load(),
             destinationPath = 'foo>bar'.toPath();
 
         lightstore.KeyValueStore.removeMocks();
