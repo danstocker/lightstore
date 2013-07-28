@@ -31,21 +31,23 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
         .addPrivateMethods(/** @lends lightstore.KeyValueStore# */{
             /**
              * Compacts buffer (serialized paths - values) to a tree with one (root) key.
-             * @param {object[]} json
+             * @param {object[]} keyValuePairs
              * @return {object}
              * @private
              * @memberOf lightstore.KeyValueStore
              */
-            _consolidateTree: function (json) {
+            _consolidateTree: function (keyValuePairs) {
                 var output = sntls.Tree.create(),
                     i, keyValuePair;
 
-                for (i = 0; i < json.length; i++) {
-                    keyValuePair = json[i];
+                for (i = 0; i < keyValuePairs.length; i++) {
+                    keyValuePair = keyValuePairs[i];
                     output.setNode(keyValuePair.key.toPath(), keyValuePair.value);
                 }
 
-                return output.items;
+                return [
+                    {key: this.ROOT_KEY, value: output.items[this.ROOT_KEY] || {}}
+                ];
             },
 
             /**
@@ -56,7 +58,7 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
              * @private
              */
             _onRead: function (handler, err, json) {
-                handler(err, json ? self._consolidateTree.call(this, json)[this.ROOT_KEY] : {});
+                handler(err, self._consolidateTree.call(this, json || []));
             }
         })
         .addMethods(/** @lends lightstore.KeyValueStore# */{

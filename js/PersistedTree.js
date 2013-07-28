@@ -19,7 +19,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
      * @extends {sntls.Tree}
      */
     lightstore.PersistedTree = self
-        .addPrivateMethods(/** @lends lightstore.PersistedTree */{
+        .addPrivateMethods(/** @lends lightstore.PersistedTree# */{
             /**
              * Called when datastore finished loading.
              * Assigns input json to Tree buffer.
@@ -29,9 +29,15 @@ troop.postpone(lightstore, 'PersistedTree', function () {
              * @private
              */
             _onRead: function (handler, err, json) {
-                this.items = json;
+                var file = this.file,
+                    items = file.isA(lightstore.KeyValueStore) ?
+                        json[0].value :
+                        json;
+
+                this.items = items;
+
                 if (handler) {
-                    handler(err, json);
+                    handler(err, items);
                 }
             }
         })

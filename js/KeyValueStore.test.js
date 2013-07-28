@@ -14,24 +14,28 @@
                 {key: "root>test>path>hello", value: "all"},
                 {key: "root>foo>bar>baz>boo", value: 1234}
             ],
-            rjsonConsolidated = {
-                "root": {
-                    test: {
-                        foo : 1,
-                        path: {
-                            hello: "all"
-                        }
-                    },
-                    foo : {
-                        bar: {
-                            baz: {
-                                hello: "world",
-                                boo  : 1234
+            rjsonConsolidated = [
+                {
+                    key: "root",
+
+                    value: {
+                        test: {
+                            foo : 1,
+                            path: {
+                                hello: "all"
+                            }
+                        },
+                        foo : {
+                            bar: {
+                                baz: {
+                                    hello: "world",
+                                    boo  : 1234
+                                }
                             }
                         }
                     }
                 }
-            };
+            ];
 
         deepEqual(
             lightstore.KeyValueStore._consolidateTree(rjsonFragmented),
@@ -40,9 +44,7 @@
         );
 
         deepEqual(
-            lightstore.KeyValueStore._consolidateTree([
-                {key: "root", value: rjsonConsolidated.root}
-            ]),
+            lightstore.KeyValueStore._consolidateTree(rjsonConsolidated),
             rjsonConsolidated,
             "Consolidated RJSON consolidated again"
         );
@@ -57,18 +59,24 @@
                 {key: "root", value: "foo"}
             ];
 
-        store.addMocks({
+        lightstore.KeyValueStore.addMocks({
             _consolidateTree: function (json) {
                 strictEqual(json, rawContents, "Original data passed for consolidation");
-                return {root: "foo"};
+                return [
+                    {key: "root", value: "foo"}
+                ];
             }
         });
 
         function onRead(err, json) {
-            equal(json, "foo", "Root node");
+            deepEqual(json, [
+                {key: "root", value: "foo"}
+            ], "Root node");
         }
 
         store._onRead(onRead, undefined, rawContents);
+
+        lightstore.KeyValueStore.removeMocks();
     });
 
     test("Read handler w/ empty file", function () {
@@ -78,7 +86,9 @@
             lightstore.KeyValueStore.create('foo.rjson');
 
         function onRead(err, json) {
-            deepEqual(json, {}, "Root node from empty file");
+            deepEqual(json, [
+                {key: 'root', value: {}}
+            ], "Root node from empty file");
         }
 
         store._onRead(onRead, undefined);
