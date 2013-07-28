@@ -3,7 +3,8 @@
 troop.postpone(lightstore, 'PersistedTree', function () {
     "use strict";
 
-    var base = sntls.Tree;
+    var base = sntls.Tree,
+        self = base.extend();
 
     /**
      * @name lightstore.PersistedTree.create
@@ -17,7 +18,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
      * @class
      * @extends {sntls.Tree}
      */
-    lightstore.PersistedTree = base.extend()
+    lightstore.PersistedTree = self
         .addPrivateMethods(/** @lends lightstore.PersistedTree */{
             /**
              * Called when datastore finished loading.
@@ -54,7 +55,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
              * @returns {lightstore.PersistedTree}
              */
             load: function (handler) {
-                this.file.read(this._onRead.bind(this, handler));
+                this.file.read(self._onRead.bind(this, handler));
                 return this;
             },
 

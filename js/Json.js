@@ -3,7 +3,8 @@
 troop.postpone(lightstore, 'Json', function () {
     'use strict';
 
-    var fs = require('fs');
+    var fs = require('fs'),
+        self = lightstore.File.extend();
 
     /**
      * @name lightstore.Json.create
@@ -17,7 +18,7 @@ troop.postpone(lightstore, 'Json', function () {
      * @class
      * @extends lightstore.File
      */
-    lightstore.Json = lightstore.File.extend()
+    lightstore.Json = self
         .addPrivateMethods(/** @lends lightstore.Json# */{
             /**
              * Called when plain JSON data is read from disk.
@@ -26,7 +27,7 @@ troop.postpone(lightstore, 'Json', function () {
              * @param {object} data
              * @private
              */
-            _onJsonRead: function (handler, err, data) {
+            _onRead: function (handler, err, data) {
                 var parsed;
 
                 if (!err) {
@@ -51,7 +52,7 @@ troop.postpone(lightstore, 'Json', function () {
 
                 fs.readFile(
                     this.fileName,
-                    this._onJsonRead.bind(this, handler)
+                    self._onRead.bind(this, handler)
                 );
 
                 return this;

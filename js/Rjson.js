@@ -4,7 +4,8 @@ troop.postpone(lightstore, 'Rjson', function () {
     'use strict';
 
     var fs = require('fs'),
-        base = lightstore.File;
+        base = lightstore.File,
+        self = base.extend();
 
     /**
      * @name lightstore.Rjson.create
@@ -20,7 +21,7 @@ troop.postpone(lightstore, 'Rjson', function () {
      * @class
      * @extends lightstore.File
      */
-    lightstore.Rjson = base.extend()
+    lightstore.Rjson = self
         .addPrivateMethods(/** @lends lightstore.Rjson# */{
             /**
              * Called when data is read from disk.
@@ -29,7 +30,7 @@ troop.postpone(lightstore, 'Rjson', function () {
              * @param {object} data
              * @private
              */
-            _onRjsonRead: function (handler, err, data) {
+            _onRead: function (handler, err, data) {
                 var serialized,
                     parsed;
 
@@ -89,7 +90,7 @@ troop.postpone(lightstore, 'Rjson', function () {
 
                 fs.readFile(
                     this.fileName,
-                    this._onRjsonRead.bind(this, handler)
+                    self._onRead.bind(this, handler)
                 );
 
                 return this;
@@ -103,7 +104,7 @@ troop.postpone(lightstore, 'Rjson', function () {
             compact: function (handler) {
                 dessert.isFunctionOptional(handler, "Invalid compaction handler");
 
-                this.read(this._onCompact.bind(this, handler));
+                this.read(self._onCompact.bind(this, handler));
 
                 return this;
             },

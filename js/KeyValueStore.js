@@ -2,7 +2,8 @@
 troop.postpone(lightstore, 'KeyValueStore', function () {
     "use strict";
 
-    var base = lightstore.Rjson;
+    var base = lightstore.Rjson,
+        self = base.extend();
 
     /**
      * @name lightstore.KeyValueStore.create
@@ -15,7 +16,7 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
      * @class
      * @extends lightstore.Rjson
      */
-    lightstore.KeyValueStore = base.extend()
+    lightstore.KeyValueStore = self
         .addConstants(/** @lends lightstore.KeyValueStore */{
             /**
              * @type {string}
@@ -55,7 +56,7 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
              * @private
              */
             _onRead: function (handler, err, json) {
-                handler(err, json ? this._consolidateTree(json)[this.ROOT_KEY] : {});
+                handler(err, json ? self._consolidateTree.call(this, json)[this.ROOT_KEY] : {});
             }
         })
         .addMethods(/** @lends lightstore.KeyValueStore# */{
@@ -65,7 +66,7 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
              * @returns {lightstore.KeyValueStore}
              */
             read: function (handler) {
-                base.read.call(this, this._onRead.bind(this, handler));
+                base.read.call(this, self._onRead.bind(this, handler));
                 return this;
             },
 
