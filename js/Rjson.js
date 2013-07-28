@@ -3,7 +3,8 @@
 troop.postpone(lightstore, 'Rjson', function () {
     'use strict';
 
-    var fs = require('fs');
+    var fs = require('fs'),
+        base = lightstore.File;
 
     /**
      * @name lightstore.Rjson.create
@@ -19,7 +20,7 @@ troop.postpone(lightstore, 'Rjson', function () {
      * @class
      * @extends lightstore.File
      */
-    lightstore.Rjson = lightstore.File.extend()
+    lightstore.Rjson = base.extend()
         .addPrivateMethods(/** @lends lightstore.Rjson# */{
             /**
              * Called when data is read from disk.
@@ -30,14 +31,13 @@ troop.postpone(lightstore, 'Rjson', function () {
              */
             _onRjsonRead: function (handler, err, data) {
                 var serialized,
-                    closingBracket,
                     parsed;
 
                 if (!err) {
                     serialized = data.toString();
-                    closingBracket = serialized[0] === '[' ? ']' : '}';
+                    this.isArray = serialized[0] === '[';
                     try {
-                        parsed = JSON.parse(serialized + closingBracket);
+                        parsed = JSON.parse(serialized + (this.isArray ? ']' : '}'));
                     } catch (e) {
                         dessert.assert(false, "Invalid RJSON");
                     }
@@ -68,6 +68,17 @@ troop.postpone(lightstore, 'Rjson', function () {
             }
         })
         .addMethods(/** @lends lightstore.Rjson# */{
+            init: function (fileName) {
+                base.init.call(this, fileName);
+
+                /**
+                 * Signifies data buffer type.
+                 * Important because of record/change order.
+                 * @type {boolean}
+                 */
+                this.isArray = undefined;
+            },
+
             /**
              * Reads the whole RJSON database file.
              * @param {function} handler Callback
@@ -108,14 +119,21 @@ troop.postpone(lightstore, 'Rjson', function () {
                     .isObject(data, "Invalid write data buffer")
                     .isFunctionOptional(handler, "Invalid write handler");
 
-                var fileName = this.fileName;
+                var that = this,
+                    fileName = this.fileName;
 
                 fs.exists(fileName, function (exists) {
-                    var serialized = exists ?
+                    var serialized;
+
+                    if (exists) {
                         // file exists, make diff
-                        ',' + JSON.stringify(data).slice(1, -1) :
+                        dessert.assert(data instanceof Array !== that.isArray, "Invalid data");
+                        serialized = ',' + JSON.stringify(data).slice(1, -1);
+                    } else {
                         // file is new, leave opening brace
-                        JSON.stringify(data).slice(0, -1);
+                        that.isArray = data instanceof Array;
+                        serialized = JSON.stringify(data).slice(0, -1);
+                    }
 
                     fs.appendFile(
                         fileName,

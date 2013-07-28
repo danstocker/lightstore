@@ -37,7 +37,7 @@
     });
 
     test("Reading RJSON", function () {
-        expect(1);
+        expect(4);
 
         var rjson = lightstore.Rjson.create('test.ls');
 
@@ -49,7 +49,22 @@
         });
 
         rjson.read(function (err, data) {
-            deepEqual(data, {hello: "world"}, "Rjson contents");
+            equal(rjson.isArray, false, "Buffer type");
+            deepEqual(data, {hello: "world"}, "Rjson contents (object)");
+        });
+
+        fs.removeMocks();
+
+        fs.addMocks({
+            readFile: function (fileName, handler) {
+                // returns RJSON contents
+                handler(undefined, '["hello","world"');
+            }
+        });
+
+        rjson.read(function (err, data) {
+            equal(rjson.isArray, true, "Buffer type");
+            deepEqual(data, ["hello", "world"], "Rjson contents (array)");
         });
 
         fs.removeMocks();
