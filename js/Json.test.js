@@ -4,17 +4,9 @@
 (function () {
     'use strict';
 
-    var fs = require('fs'),
-        path = require('path');
+    var fs = require('fs');
 
     module("Json");
-
-    test("Instantiation", function () {
-        var rjson;
-
-        rjson = lightstore.Json.create('test.foo');
-        equal(rjson.fileName, 'test.foo', "File name initialized");
-    });
 
     test("General reading", function () {
         var rjson = lightstore.Json.create('test.foo');

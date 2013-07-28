@@ -17,9 +17,9 @@ troop.postpone(lightstore, 'Rjson', function () {
      * May contain the same key several times over. Upon parsing,
      * the last value (which is also the latest) will be used.
      * @class
-     * @extends troop.Base
+     * @extends lightstore.File
      */
-    lightstore.Rjson = troop.Base.extend()
+    lightstore.Rjson = lightstore.File.extend()
         .addPrivateMethods(/** @lends lightstore.Rjson# */{
             /**
              * Called when data is read from disk.
@@ -62,18 +62,6 @@ troop.postpone(lightstore, 'Rjson', function () {
             }
         })
         .addMethods(/** @lends lightstore.Rjson# */{
-            /**
-             * Initializes RJSON.
-             * @param {string} fileName Name of database file.
-             */
-            init: function (fileName) {
-                /**
-                 * @constant
-                 * @type {string}
-                 */
-                this.fileName = fileName;
-            },
-
             /**
              * Reads the whole RJSON database file.
              * @param {function} handler Callback

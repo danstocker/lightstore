@@ -15,9 +15,9 @@ troop.postpone(lightstore, 'Json', function () {
     /**
      * Read-only JSON class.
      * @class
-     * @extends troop.Base
+     * @extends lightstore.File
      */
-    lightstore.Json = troop.Base.extend()
+    lightstore.Json = lightstore.File.extend()
         .addPrivateMethods(/** @lends lightstore.Json# */{
             /**
              * Called when plain JSON data is read from disk.
@@ -41,18 +41,6 @@ troop.postpone(lightstore, 'Json', function () {
             }
         })
         .addMethods(/** @lends lightstore.Json# */{
-            /**
-             * Initializes JSON.
-             * @param {string} fileName
-             */
-            init: function (fileName) {
-                /**
-                 * @constant
-                 * @type {string}
-                 */
-                this.fileName = fileName;
-            },
-
             /**
              * Reads JSON file.
              * @param {function} handler Callback
