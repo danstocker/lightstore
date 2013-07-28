@@ -29,11 +29,15 @@ troop.postpone(lightstore, 'Rjson', function () {
              * @private
              */
             _onRjsonRead: function (handler, err, data) {
-                var parsed;
+                var serialized,
+                    closingBracket,
+                    parsed;
 
                 if (!err) {
+                    serialized = data.toString();
+                    closingBracket = serialized[0] === '[' ? ']' : '}';
                     try {
-                        parsed = JSON.parse('{' + data.toString().slice(0, -1) + '}');
+                        parsed = JSON.parse(serialized + closingBracket);
                     } catch (e) {
                         dessert.assert(false, "Invalid RJSON");
                     }
@@ -55,7 +59,7 @@ troop.postpone(lightstore, 'Rjson', function () {
                 if (!err) {
                     fs.writeFile(
                         this.fileName,
-                        JSON.stringify(data).slice(1, -1) + ',',
+                        JSON.stringify(data).slice(0, -1) + ',',
                         handler
                     );
                 } else if (handler) {
@@ -104,11 +108,21 @@ troop.postpone(lightstore, 'Rjson', function () {
                     .isObject(data, "Invalid write data buffer")
                     .isFunctionOptional(handler, "Invalid write handler");
 
-                fs.appendFile(
-                    this.fileName,
-                    JSON.stringify(data).slice(1, -1) + ',',
-                    handler
-                );
+                var fileName = this.fileName;
+
+                fs.exists(fileName, function (exists) {
+                    var serialized = exists ?
+                        // file exists, make diff
+                        ',' + JSON.stringify(data).slice(1, -1) :
+                        // file is new, leave opening brace
+                        JSON.stringify(data).slice(0, -1);
+
+                    fs.appendFile(
+                        fileName,
+                        serialized,
+                        handler
+                    );
+                });
 
                 return this;
             }

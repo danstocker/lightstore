@@ -44,7 +44,7 @@
         fs.addMocks({
             readFile: function (fileName, handler) {
                 // returns RJSON contents
-                handler(undefined, '"hello":"world",');
+                handler(undefined, '{"hello":"world"');
             }
         });
 
