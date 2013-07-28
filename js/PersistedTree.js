@@ -1,4 +1,5 @@
 /*global dessert, troop, sntls, lightstore */
+/*jshint node:true */
 troop.postpone(lightstore, 'PersistedTree', function () {
     "use strict";
 
@@ -8,6 +9,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
      * @name lightstore.PersistedTree.create
      * @function
      * @param {string} fileName
+     * @param {object} items
      * @returns {lightstore.PersistedTree}
      */
 
@@ -34,10 +36,11 @@ troop.postpone(lightstore, 'PersistedTree', function () {
         .addMethods(/** @lends lightstore.PersistedTree# */{
             /**
              * @param {string} fileName
+             * @param {object} items
              * @ignore
              */
-            init: function (fileName) {
-                base.init.call(this);
+            init: function (fileName, items) {
+                base.init.call(this, items);
 
                 /**
                  * @type {lightstore.File}
@@ -80,9 +83,37 @@ troop.postpone(lightstore, 'PersistedTree', function () {
                 if (store.isA(lightstore.KeyValueStore)) {
                     // persisting node
                     store.write(path, value);
+                } else {
+                    process.stdout.write("Change not written to file. Save contents to new file via `ls.saveAs()`.\n");
                 }
 
                 return this;
             }
         });
 });
+
+(function () {
+    "use strict";
+
+    dessert.addTypes(/** @lends dessert */{
+        isPersistedTree: function (expr) {
+            return lightstore.PersistedTree.isBaseOf(expr);
+        },
+
+        isPersistedTreeOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   lightstore.PersistedTree.isBaseOf(expr);
+        }
+    });
+
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
+        /**
+         * Reinterprets hash as a persisted tree.
+         * @param {string} fileName
+         * @returns {sntls.Tree}
+         */
+        toPersistedTree: function (fileName) {
+            return lightstore.PersistedTree.create(fileName, this.items);
+        }
+    });
+}());

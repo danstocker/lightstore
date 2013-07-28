@@ -13,6 +13,13 @@
         ok(treeStore._store.isA(lightstore.KeyValueStore), "Store member assigned");
     });
 
+    test("Type conversion", function () {
+        var treeStore = sntls.Hash.create({foo: "bar"})
+            .toPersistedTree('fool.ls');
+
+        ok(treeStore.isA(lightstore.PersistedTree), "Hash converted to persisted tree");
+    });
+
     test("Reading", function () {
         expect(2);
 
