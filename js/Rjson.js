@@ -60,7 +60,7 @@ troop.postpone(lightstore, 'Rjson', function () {
                 if (!err) {
                     fs.writeFile(
                         this.fileName,
-                        JSON.stringify(data).slice(0, -1) + ',',
+                        JSON.stringify(data).slice(0, -1),
                         handler
                     );
                 } else if (handler) {
