@@ -29,7 +29,7 @@
 
         fs.addMocks({
             readFile: function (fileName, handler) {
-                handler(undefined, '[{"key":"root","value":{"hello":"world"}}');
+                handler(undefined, '[{"k":"root","v":{"hello":"world"}}');
             }
         });
 

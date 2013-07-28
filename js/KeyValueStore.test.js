@@ -8,17 +8,17 @@
 
     test("Rjson buffer consolidation", function () {
         var rjsonFragmented = [
-                {key: "root>test>path", value: "hello"},
-                {key: "root>test>foo", value: 1},
-                {key: "root>foo>bar>baz", value: {hello: "world"}},
-                {key: "root>test>path>hello", value: "all"},
-                {key: "root>foo>bar>baz>boo", value: 1234}
+                {k: "root>test>path", v: "hello"},
+                {k: "root>test>foo", v: 1},
+                {k: "root>foo>bar>baz", v: {hello: "world"}},
+                {k: "root>test>path>hello", v: "all"},
+                {k: "root>foo>bar>baz>boo", v: 1234}
             ],
             rjsonConsolidated = [
                 {
-                    key: "root",
+                    k: "root",
 
-                    value: {
+                    v: {
                         test: {
                             foo : 1,
                             path: {
@@ -56,21 +56,21 @@
         var store = /** @type {lightstore.KeyValueStore} */
                 lightstore.KeyValueStore.create('foo.rjson'),
             rawContents = [
-                {key: "root", value: "foo"}
+                {k: "root", v: "foo"}
             ];
 
         lightstore.KeyValueStore.addMocks({
             _consolidateTree: function (json) {
                 strictEqual(json, rawContents, "Original data passed for consolidation");
                 return [
-                    {key: "root", value: "foo"}
+                    {k: "root", v: "foo"}
                 ];
             }
         });
 
         function onRead(err, json) {
             deepEqual(json, [
-                {key: "root", value: "foo"}
+                {k: "root", v: "foo"}
             ], "Root node");
         }
 
@@ -87,7 +87,7 @@
 
         function onRead(err, json) {
             deepEqual(json, [
-                {key: 'root', value: {}}
+                {k: 'root', v: {}}
             ], "Root node from empty file");
         }
 
@@ -127,7 +127,7 @@
                 deepEqual(
                     buffer,
                     [
-                        {key: "root>test>path", value: {foo: "bar"}}
+                        {k: "root>test>path", v: {foo: "bar"}}
                     ],
                     "Buffer containing path/value pair"
                 );

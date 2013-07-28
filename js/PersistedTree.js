@@ -31,7 +31,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             _onRead: function (handler, err, json) {
                 var file = this.file,
                     items = file.isA(lightstore.KeyValueStore) ?
-                        json[0].value :
+                        json[0].v :
                         json;
 
                 this.items = items;

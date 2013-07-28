@@ -42,11 +42,11 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
 
                 for (i = 0; i < keyValuePairs.length; i++) {
                     keyValuePair = keyValuePairs[i];
-                    output.setNode(keyValuePair.key.toPath(), keyValuePair.value);
+                    output.setNode(keyValuePair.k.toPath(), keyValuePair.v);
                 }
 
                 return [
-                    {key: this.ROOT_KEY, value: output.items[this.ROOT_KEY] || {}}
+                    {k: this.ROOT_KEY, v: output.items[this.ROOT_KEY] || {}}
                 ];
             },
 
@@ -82,11 +82,11 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
             write: function (path, value, handler) {
                 var buffer = [
                     {
-                        key: path
+                        k: path
                             .prepend(this.ROOT_PATH)
                             .toString(),
 
-                        value: value
+                        v: value
                     }
                 ];
 
