@@ -10,7 +10,7 @@
         var treeStore = /** @type {lightstore.PersistedTree} */
             lightstore.PersistedTree.create('test.ls');
 
-        ok(treeStore._store.isA(lightstore.KeyValueStore), "Store member assigned");
+        ok(treeStore.file.isA(lightstore.KeyValueStore), "Store member assigned");
     });
 
     test("Type conversion", function () {
@@ -83,7 +83,7 @@
 
         lightstore.KeyValueStore.removeMocks();
 
-        treeStore._store.addMocks({
+        treeStore.file.addMocks({
             write: function (path, value) {
                 strictEqual(path, destinationPath, "Destination path");
                 equal(value, 'hello', "Node value");
@@ -98,7 +98,7 @@
 
         treeStore.setNode(destinationPath, 'hello');
 
-        treeStore._store.removeMocks();
+        treeStore.file.removeMocks();
 
         sntls.Tree.removeMocks();
     });

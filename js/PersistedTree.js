@@ -44,9 +44,8 @@ troop.postpone(lightstore, 'PersistedTree', function () {
 
                 /**
                  * @type {lightstore.File}
-                 * @private
                  */
-                this._store = lightstore.File.create(fileName);
+                this.file = lightstore.File.create(fileName);
             },
 
             /**
@@ -54,7 +53,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
              * @returns {lightstore.PersistedTree}
              */
             load: function (handler) {
-                this._store.read(this._onRead.bind(this, handler));
+                this.file.read(this._onRead.bind(this, handler));
                 return this;
             },
 
@@ -79,10 +78,10 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             setNode: function (path, value) {
                 base.setNode.call(this, path, value);
 
-                var store = this._store;
-                if (store.isA(lightstore.KeyValueStore)) {
+                var file = this.file;
+                if (file.isA(lightstore.KeyValueStore)) {
                     // persisting node
-                    store.write(path, value);
+                    file.write(path, value);
                 } else {
                     process.stdout.write("Change not written to file. Save contents to new file via `ls.saveAs()`.\n");
                 }
