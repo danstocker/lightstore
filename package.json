@@ -1,6 +1,6 @@
 {
     "name"           : "lightstore",
-    "version"        : "0.1.7",
+    "version"        : "0.2.0",
     "description"    : "JSON key-value store",
     "keywords"       : [
         "json",
