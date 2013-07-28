@@ -84,6 +84,10 @@
         }, "Calling write with invalid handler");
 
         fs.addMocks({
+            exists: function (fileName, handler) {
+                handler(false);
+            },
+
             appendFile: function (fileName) {
                 equal(fileName, 'test.foo', "File name received");
             }

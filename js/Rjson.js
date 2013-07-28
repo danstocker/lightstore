@@ -126,12 +126,21 @@ troop.postpone(lightstore, 'Rjson', function () {
                     var serialized;
 
                     if (exists) {
-                        // file exists, make diff
-                        dessert.assert(data instanceof Array !== that.isArray, "Invalid data");
+                        // checking input against buffer type
+                        if (data instanceof Array !== that.isArray) {
+                            if (handler) {
+                                handler(new Error("Buffer type mismatch"));
+                            }
+                            return;
+                        }
+
+                        // file exists, making diff
                         serialized = ',' + JSON.stringify(data).slice(1, -1);
                     } else {
-                        // file is new, leave opening brace
+                        // file is new, establishing buffer type
                         that.isArray = data instanceof Array;
+
+                        // leaving opening brace
                         serialized = JSON.stringify(data).slice(0, -1);
                     }
 
