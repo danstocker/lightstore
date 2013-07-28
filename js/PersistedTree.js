@@ -72,6 +72,16 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             },
 
             /**
+             * Saves datastore to file, compacted.
+             * @param {function} handler
+             * @returns {lightstore.PersistedTree}
+             */
+            save: function (handler) {
+                this.saveAs(this.file.fileName, handler);
+                return this;
+            },
+
+            /**
              * @param {sntls.Path} path Path to node
              * @param {*} value Node value to set
              * @returns {lightstore.PersistedTree}

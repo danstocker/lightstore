@@ -66,6 +66,28 @@
         lightstore.KeyValueStore.removeMocks();
     });
 
+    test("Saving", function () {
+        expect(3);
+
+        function onSave() {}
+
+        lightstore.PersistedTree.addMocks({
+            saveAs: function (fileName, handler) {
+                equal(fileName, 'foo.ls', "File name");
+                strictEqual(handler, onSave, "Handler");
+            }
+        });
+
+        var treeStore = lightstore.PersistedTree.create('foo.ls'),
+            result;
+
+        result = treeStore.save(onSave);
+
+        strictEqual(result, treeStore, "Saving is chainable");
+
+        lightstore.PersistedTree.removeMocks();
+    });
+
     test("Writing", function () {
         expect(4);
 
