@@ -22,7 +22,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             /**
              * Called when datastore finished loading.
              * Assigns input json to Tree buffer.
-             * @param {function} handler
+             * @param {function} [handler]
              * @param {Error} err
              * @param {object} json
              * @private
@@ -50,7 +50,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             },
 
             /**
-             * @param {function} handler
+             * @param {function} [handler]
              * @returns {lightstore.PersistedTree}
              */
             load: function (handler) {
@@ -62,7 +62,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
              * Saves datastore contents to a different file.
              * Useful when opening unsupported file types (JSON, RJSON).
              * @param {string} fileName Name of new file
-             * @param {function} handler
+             * @param {function} [handler]
              * @returns {lightstore.PersistedTree}
              */
             saveAs: function (fileName, handler) {
@@ -73,7 +73,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
 
             /**
              * Saves datastore to file, compacted.
-             * @param {function} handler
+             * @param {function} [handler]
              * @returns {lightstore.PersistedTree}
              */
             save: function (handler) {
