@@ -30,19 +30,18 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
         .addPrivateMethods(/** @lends lightstore.KeyValueStore# */{
             /**
              * Compacts buffer (serialized paths - values) to a tree with one (root) key.
-             * @param {object} json
+             * @param {object[]} json
              * @return {object}
              * @private
              * @memberOf lightstore.KeyValueStore
              */
-            _compactBuffer: function (json) {
+            _consolidateTree: function (json) {
                 var output = sntls.Tree.create(),
-                    keys = Object.keys(json),
-                    i, key;
+                    i, keyValuePair;
 
-                for (i = 0; i < keys.length; i++) {
-                    key = keys[i];
-                    output.setNode(key.toPath(), json[key]);
+                for (i = 0; i < json.length; i++) {
+                    keyValuePair = json[i];
+                    output.setNode(keyValuePair.key.toPath(), keyValuePair.value);
                 }
 
                 return output.items;
@@ -56,7 +55,7 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
              * @private
              */
             _onRead: function (handler, err, json) {
-                handler(err, json ? this._compactBuffer(json)[this.ROOT_KEY] : {});
+                handler(err, json ? this._consolidateTree(json)[this.ROOT_KEY] : {});
             }
         })
         .addMethods(/** @lends lightstore.KeyValueStore# */{
@@ -78,12 +77,15 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
              * @returns {lightstore.KeyValueStore}
              */
             write: function (path, value, handler) {
-                var buffer = {},
-                    key = path
-                        .prepend(this.ROOT_PATH)
-                        .toString();
+                var buffer = [
+                    {
+                        key: path
+                            .prepend(this.ROOT_PATH)
+                            .toString(),
 
-                buffer[key] = value;
+                        value: value
+                    }
+                ];
 
                 base.write.call(this, buffer, handler);
 

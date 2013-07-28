@@ -7,14 +7,14 @@
     module("KeyValueStore");
 
     test("Rjson buffer consolidation", function () {
-        var rjsonFragmented = {
-                "root>test>path"      : "hello",
-                "root>test>foo"       : 1,
-                "root>foo>bar>baz"    : {hello: "world"},
-                "root>test>path>hello": "all",
-                "root>foo>bar>baz>boo": 1234
-            },
-            rjsonCompacted = {
+        var rjsonFragmented = [
+                {key: "root>test>path", value: "hello"},
+                {key: "root>test>foo", value: 1},
+                {key: "root>foo>bar>baz", value: {hello: "world"}},
+                {key: "root>test>path>hello", value: "all"},
+                {key: "root>foo>bar>baz>boo", value: 1234}
+            ],
+            rjsonConsolidated = {
                 "root": {
                     test: {
                         foo : 1,
@@ -34,15 +34,17 @@
             };
 
         deepEqual(
-            lightstore.KeyValueStore._compactBuffer(rjsonFragmented),
-            rjsonCompacted,
-            "Fragmented RJSON compacted"
+            lightstore.KeyValueStore._consolidateTree(rjsonFragmented),
+            rjsonConsolidated,
+            "Fragmented RJSON consolidated"
         );
 
         deepEqual(
-            lightstore.KeyValueStore._compactBuffer(rjsonCompacted),
-            rjsonCompacted,
-            "Compacted RJSON compacted again"
+            lightstore.KeyValueStore._consolidateTree([
+                {key: "root", value: rjsonConsolidated.root}
+            ]),
+            rjsonConsolidated,
+            "Consolidated RJSON consolidated again"
         );
     });
 
@@ -51,12 +53,14 @@
 
         var store = /** @type {lightstore.KeyValueStore} */
                 lightstore.KeyValueStore.create('foo.rjson'),
-            rawContents = {root: "foo"};
+            rawContents = [
+                {key: "root", value: "foo"}
+            ];
 
         store.addMocks({
-            _compactBuffer: function (json) {
-                strictEqual(json, rawContents, "Original data passed for compaction");
-                return json;
+            _consolidateTree: function (json) {
+                strictEqual(json, rawContents, "Original data passed for consolidation");
+                return {root: "foo"};
             }
         });
 
@@ -71,7 +75,7 @@
         expect(1);
 
         var store = /** @type {lightstore.KeyValueStore} */
-                lightstore.KeyValueStore.create('foo.rjson');
+            lightstore.KeyValueStore.create('foo.rjson');
 
         function onRead(err, json) {
             deepEqual(json, {}, "Root node from empty file");
@@ -112,9 +116,9 @@
             write: function (buffer, handler) {
                 deepEqual(
                     buffer,
-                    {
-                        "root>test>path": {foo: "bar"}
-                    },
+                    [
+                        {key: "root>test>path", value: {foo: "bar"}}
+                    ],
                     "Buffer containing path/value pair"
                 );
 
