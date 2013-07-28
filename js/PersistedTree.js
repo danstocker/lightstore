@@ -56,6 +56,19 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             },
 
             /**
+             * Saves datastore contents to a different file.
+             * Useful when opening unsupported file types (JSON, RJSON).
+             * @param {string} fileName Name of new file
+             * @param {function} handler
+             * @returns {lightstore.PersistedTree}
+             */
+            saveAs: function (fileName, handler) {
+                lightstore.KeyValueStore.create(fileName)
+                    .write([].toPath(), this.items, handler);
+                return this;
+            },
+
+            /**
              * @param {sntls.Path} path Path to node
              * @param {*} value Node value to set
              * @returns {lightstore.PersistedTree}

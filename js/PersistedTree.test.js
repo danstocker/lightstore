@@ -35,6 +35,30 @@
         deepEqual(treeStore.items, {hello: "world"}, "File contents read");
     });
 
+    test("Saving to new file", function () {
+        expect(5);
+
+        function onSaved() {}
+
+        lightstore.KeyValueStore.addMocks({
+            write: function (path, value, handler) {
+                equal(this.fileName, 'test.ls', "File name");
+                deepEqual(path.asArray, [], "Empty path");
+                deepEqual(value, {}, "Contents");
+                strictEqual(handler, onSaved, "Success handler");
+            }
+        });
+
+        var treeStore = lightstore.PersistedTree.create('test.json'),
+            result;
+
+        result = treeStore.saveAs('test.ls', onSaved);
+
+        strictEqual(result, treeStore, "Saving is chainable");
+
+        lightstore.KeyValueStore.removeMocks();
+    });
+
     test("Writing", function () {
         expect(4);
 
