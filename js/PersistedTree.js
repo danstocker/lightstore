@@ -88,6 +88,14 @@ troop.postpone(lightstore, 'PersistedTree', function () {
                 return this;
             },
 
+            getSafeNode: function () {
+
+            },
+
+            getOrSetNode: function () {
+
+            },
+
             /**
              * @param {sntls.Path} path Path to node
              * @param {*} value Node value to set
@@ -105,6 +113,18 @@ troop.postpone(lightstore, 'PersistedTree', function () {
                 }
 
                 return this;
+            },
+
+            unsetNode: function () {
+
+            },
+
+            unsetKey: function () {
+
+            },
+
+            unsetPath: function () {
+
             }
         });
 });
