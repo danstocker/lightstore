@@ -39,6 +39,23 @@ troop.postpone(lightstore, 'PersistedTree', function () {
                 if (handler) {
                     handler(err, items);
                 }
+            },
+
+            /**
+             * Writes node to file when storage is KeyValueStore. Displays a message otherwise.
+             * @param {sntls.Path} path
+             * @param {*} value
+             * @param {function} [handler]
+             * @private
+             */
+            _write: function (path, value, handler) {
+                var file = this.file;
+                if (file.isA(lightstore.KeyValueStore)) {
+                    // persisting node
+                    file.write(path, value, handler);
+                } else {
+                    process.stdout.write("Change not written to file. Save contents to new file via `ls.saveAs()`.\n");
+                }
             }
         })
         .addMethods(/** @lends lightstore.PersistedTree# */{
@@ -88,8 +105,18 @@ troop.postpone(lightstore, 'PersistedTree', function () {
                 return this;
             },
 
-            getSafeNode: function () {
+            /**
+             * @param {sntls.Path} path
+             * @param {function} handler
+             * @returns {Object}
+             */
+            getSafeNode: function (path, handler) {
+                var that = this;
 
+                return base.getSafeNode(path, function (path, value) {
+                    // a new node was created
+                    that._write(path, value, handler);
+                });
             },
 
             getOrSetNode: function () {
@@ -99,19 +126,12 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             /**
              * @param {sntls.Path} path Path to node
              * @param {*} value Node value to set
+             * @param {function} [handler]
              * @returns {lightstore.PersistedTree}
              */
-            setNode: function (path, value) {
+            setNode: function (path, value, handler) {
                 base.setNode.call(this, path, value);
-
-                var file = this.file;
-                if (file.isA(lightstore.KeyValueStore)) {
-                    // persisting node
-                    file.write(path, value);
-                } else {
-                    process.stdout.write("Change not written to file. Save contents to new file via `ls.saveAs()`.\n");
-                }
-
+                this._write(path, value, handler);
                 return this;
             },
 

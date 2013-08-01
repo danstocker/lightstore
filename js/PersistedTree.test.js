@@ -88,25 +88,89 @@
         lightstore.PersistedTree.removeMocks();
     });
 
-    test("Writing", function () {
-        expect(4);
+    test("Writing (internal)", function () {
+        expect(3);
 
-        lightstore.KeyValueStore.addMocks({
-            read: function () {
-                ok(true, "Data read");
-                return this;
+        var treeStore = /** @type {lightstore.PersistedTree} */
+                lightstore.PersistedTree.create('test.ls'),
+            destinationPath = 'foo>bar'.toPath();
+
+        function onWrite() {}
+
+        treeStore.file.addMocks({
+            write: function (path, value, handler) {
+                strictEqual(path, destinationPath, "Destination path");
+                equal(value, 'hello', "Node value");
+                strictEqual(handler, onWrite, "Write handler");
             }
         });
 
+        sntls.Tree.addMocks({
+            setNode: function () {
+                ok(true, "Node set in memory");
+            }
+        });
+
+        treeStore._write(destinationPath, 'hello', onWrite);
+
+        treeStore.file.removeMocks();
+
+        sntls.Tree.removeMocks();
+    });
+
+    test("Safe node retrieval", function () {
+        expect(6);
+
         var treeStore = /** @type {lightstore.PersistedTree} */
-                lightstore.PersistedTree.create('test.ls')
-                    .load(),
+                lightstore.PersistedTree.create('test.ls'),
             destinationPath = 'foo>bar'.toPath();
 
-        lightstore.KeyValueStore.removeMocks();
+        treeStore.addMocks({
+            _write: function (path, value) {
+                strictEqual(path, destinationPath, "Destination path");
+                equal(value, 'hello', "Node value");
+            }
+        });
+        sntls.Tree.addMocks({
+            getSafeNode: function (path, handler) {
+                handler(path, 'hello');
+                return 'hello';
+            }
+        });
 
-        treeStore.file.addMocks({
-            write: function (path, value) {
+        equal(treeStore.getSafeNode(destinationPath), 'hello', "Node retrieved");
+
+        treeStore.removeMocks();
+        sntls.Tree.removeMocks();
+
+        treeStore.addMocks({
+            _write: function (path, value) {
+                deepEqual(path, destinationPath.clone().trim(), "Safe destination path");
+                deepEqual(value, {}, "Safe node value");
+            }
+        });
+        sntls.Tree.addMocks({
+            getSafeNode: function (path, handler) {
+                handler(destinationPath.clone().trim(), {});
+                return {};
+            }
+        });
+
+        deepEqual(treeStore.getSafeNode(destinationPath), {}, "Safe node retrieved");
+
+        treeStore.removeMocks();
+        sntls.Tree.removeMocks();
+    });
+
+    test("Writing", function () {
+        expect(3);
+
+        var treeStore = /** @type {lightstore.PersistedTree} */
+                lightstore.PersistedTree.create('test.ls'),
+            destinationPath = 'foo>bar'.toPath();
+
+        treeStore.addMocks({
+            _write: function (path, value) {
                 strictEqual(path, destinationPath, "Destination path");
                 equal(value, 'hello', "Node value");
             }
@@ -120,7 +184,7 @@
 
         treeStore.setNode(destinationPath, 'hello');
 
-        treeStore.file.removeMocks();
+        treeStore.removeMocks();
 
         sntls.Tree.removeMocks();
     });
