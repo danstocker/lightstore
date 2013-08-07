@@ -156,8 +156,20 @@ troop.postpone(lightstore, 'PersistedTree', function () {
                 return this;
             },
 
-            unsetKey: function () {
+            /**
+             * @param {sntls.Path} path
+             * @param {boolean} splice
+             * @param {function} handler
+             */
+            unsetKey: function (path, splice, handler) {
+                var that = this;
 
+                base.unsetKey(path, splice, function (actualPath) {
+                    // removing node or parent node depending on 'slice' flag
+                    that._write(actualPath, undefined, handler);
+                });
+
+                return this;
             },
 
             unsetPath: function () {

@@ -251,7 +251,7 @@
         sntls.Tree.removeMocks();
     });
 
-    test("Unsetting", function () {
+    test("Unsetting value", function () {
         expect(5);
 
         var treeStore = /** @type {lightstore.PersistedTree} */
@@ -277,6 +277,51 @@
         result = treeStore.unsetNode(destinationPath, onUnset);
 
         strictEqual(result, treeStore, "Node unset is chainable");
+
+        treeStore.removeMocks();
+        sntls.Tree.removeMocks();
+    });
+
+    test("Unsetting key", function () {
+        expect(9);
+
+        var treeStore = /** @type {lightstore.PersistedTree} */
+                lightstore.PersistedTree.create('test.ls'),
+            destinationPath = 'foo>bar'.toPath(),
+            useSplice, // whether to use splice in unsetKey
+            result;
+
+        function onUnset() {}
+
+        treeStore.addMocks({
+            _write: function (path, value, handler) {
+                if (useSplice) {
+                    deepEqual(path, destinationPath.clone().trim(), "Destination path");
+                } else {
+                    strictEqual(path, destinationPath, "Destination path");
+                }
+                equal(typeof value, 'undefined', "Undefined node value");
+                strictEqual(handler, onUnset, "Unset handler");
+            }
+        });
+        sntls.Tree.addMocks({
+            unsetKey: function (path, splice, handler) {
+                strictEqual(path, destinationPath, "Destination path");
+                if (useSplice) {
+                    handler(path.clone().trim());
+                } else {
+                    handler(path);
+                }
+            }
+        });
+
+        useSplice = false;
+        result = treeStore.unsetKey(destinationPath, useSplice, onUnset);
+
+        strictEqual(result, treeStore, "Node unset is chainable");
+
+        useSplice = true;
+        treeStore.unsetKey(destinationPath, useSplice, onUnset);
 
         treeStore.removeMocks();
         sntls.Tree.removeMocks();
