@@ -224,11 +224,12 @@
     });
 
     test("Writing", function () {
-        expect(3);
+        expect(4);
 
         var treeStore = /** @type {lightstore.PersistedTree} */
                 lightstore.PersistedTree.create('test.ls'),
-            destinationPath = 'foo>bar'.toPath();
+            destinationPath = 'foo>bar'.toPath(),
+            result;
 
         treeStore.addMocks({
             _write: function (path, value) {
@@ -242,18 +243,21 @@
             }
         });
 
-        treeStore.setNode(destinationPath, 'hello');
+        result = treeStore.setNode(destinationPath, 'hello');
+
+        strictEqual(result, treeStore, "Node set is chainable");
 
         treeStore.removeMocks();
         sntls.Tree.removeMocks();
     });
 
     test("Unsetting", function () {
-        expect(4);
+        expect(5);
 
         var treeStore = /** @type {lightstore.PersistedTree} */
                 lightstore.PersistedTree.create('test.ls'),
-            destinationPath = 'foo>bar'.toPath();
+            destinationPath = 'foo>bar'.toPath(),
+            result;
 
         function onUnset() {}
 
@@ -270,7 +274,9 @@
             }
         });
 
-        treeStore.unsetNode(destinationPath, onUnset);
+        result = treeStore.unsetNode(destinationPath, onUnset);
+
+        strictEqual(result, treeStore, "Node unset is chainable");
 
         treeStore.removeMocks();
         sntls.Tree.removeMocks();
