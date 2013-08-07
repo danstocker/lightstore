@@ -16,8 +16,8 @@
     },
     "dependencies"   : {
         "dessert": "~0.3.2",
-        "troop"  : "~0.5.1",
-        "sntls"  : "~0.14.0"
+        "troop"  : "~0.6.0",
+        "sntls"  : "~0.14.1"
     },
     "devDependencies": {
         "node-troop"          : "~0.1.1",
