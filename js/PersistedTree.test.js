@@ -158,12 +158,66 @@
         });
         sntls.Tree.addMocks({
             getSafeNode: function (path, handler) {
-                handler(destinationPath, {});
+                handler(path, {});
                 return {};
             }
         });
 
         deepEqual(treeStore.getSafeNode(destinationPath, onWrite), {}, "Safe node retrieved");
+
+        treeStore.removeMocks();
+        sntls.Tree.removeMocks();
+    });
+
+    test("Get or set node", function () {
+        expect(5);
+
+        var treeStore = /** @type {lightstore.PersistedTree} */
+                lightstore.PersistedTree.create('test.ls'),
+            destinationPath = 'foo>bar'.toPath();
+
+        function onWrite() {}
+
+        function nodeGenerator() {return {};}
+
+        // node exists
+
+        treeStore.addMocks({
+            _write: function () {
+                // should not be called
+                ok(true, "Storage write called");
+            }
+        });
+        sntls.Tree.addMocks({
+            getOrSetNode: function () {
+                // no change, handler is not called
+                return 'hello';
+            }
+        });
+
+        equal(treeStore.getOrSetNode(destinationPath), 'hello', "Node retrieved");
+
+        treeStore.removeMocks();
+        sntls.Tree.removeMocks();
+
+        // node does not exist
+
+        treeStore.addMocks({
+            _write: function (path, value, handler) {
+                strictEqual(path, destinationPath, "Safe destination path");
+                deepEqual(value, {}, "Safe node value");
+                strictEqual(handler, onWrite, "Write event handler");
+            }
+        });
+        sntls.Tree.addMocks({
+            getOrSetNode: function (path, generator, handler) {
+                var result = generator();
+                handler(path, result);
+                return result;
+            }
+        });
+
+        deepEqual(treeStore.getOrSetNode(destinationPath, nodeGenerator, onWrite), {}, "Safe node retrieved");
 
         treeStore.removeMocks();
         sntls.Tree.removeMocks();

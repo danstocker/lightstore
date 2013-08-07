@@ -108,7 +108,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             /**
              * @param {sntls.Path} path
              * @param {function} [handler]
-             * @returns {Object}
+             * @returns {*}
              */
             getSafeNode: function (path, handler) {
                 var that = this;
@@ -119,8 +119,19 @@ troop.postpone(lightstore, 'PersistedTree', function () {
                 });
             },
 
-            getOrSetNode: function () {
+            /**
+             * @param {sntls.Path} path
+             * @param {function} generator
+             * @param {function} [handler]
+             * @returns {*}
+             */
+            getOrSetNode: function (path, generator, handler) {
+                var that = this;
 
+                return base.getOrSetNode(path, generator, function (path, value) {
+                    // a new node was created
+                    that._write(path, value, handler);
+                });
             },
 
             /**
