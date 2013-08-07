@@ -236,7 +236,6 @@
                 equal(value, 'hello', "Node value");
             }
         });
-
         sntls.Tree.addMocks({
             setNode: function () {
                 ok(true, "Node set in memory");
@@ -246,7 +245,34 @@
         treeStore.setNode(destinationPath, 'hello');
 
         treeStore.removeMocks();
+        sntls.Tree.removeMocks();
+    });
 
+    test("Unsetting", function () {
+        expect(4);
+
+        var treeStore = /** @type {lightstore.PersistedTree} */
+                lightstore.PersistedTree.create('test.ls'),
+            destinationPath = 'foo>bar'.toPath();
+
+        function onUnset() {}
+
+        treeStore.addMocks({
+            _write: function (path, value, handler) {
+                strictEqual(path, destinationPath, "Destination path");
+                equal(typeof value, 'undefined', "Undefined node value");
+                strictEqual(handler, onUnset, "Unset handler");
+            }
+        });
+        sntls.Tree.addMocks({
+            unsetNode: function (path) {
+                strictEqual(path, destinationPath, "Unset path");
+            }
+        });
+
+        treeStore.unsetNode(destinationPath, onUnset);
+
+        treeStore.removeMocks();
         sntls.Tree.removeMocks();
     });
 }());

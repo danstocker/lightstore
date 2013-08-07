@@ -45,7 +45,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
              * Writes node to file when storage is KeyValueStore. Displays a message otherwise.
              * @param {sntls.Path} path
              * @param {*} value
-             * @param {function} [handler]
+             * @param {function} handler
              * @private
              */
             _write: function (path, value, handler) {
@@ -146,8 +146,14 @@ troop.postpone(lightstore, 'PersistedTree', function () {
                 return this;
             },
 
-            unsetNode: function () {
-
+            /**
+             * @param {sntls.Path} path
+             * @param {function} [handler]
+             */
+            unsetNode: function (path, handler) {
+                base.unsetNode.call(this, path);
+                this._write(path, undefined, handler);
+                return this;
             },
 
             unsetKey: function () {
