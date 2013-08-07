@@ -107,7 +107,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
 
             /**
              * @param {sntls.Path} path
-             * @param {function} handler
+             * @param {function} [handler]
              * @returns {Object}
              */
             getSafeNode: function (path, handler) {

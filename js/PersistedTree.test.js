@@ -119,21 +119,25 @@
     });
 
     test("Safe node retrieval", function () {
-        expect(6);
+        expect(5);
 
         var treeStore = /** @type {lightstore.PersistedTree} */
                 lightstore.PersistedTree.create('test.ls'),
             destinationPath = 'foo>bar'.toPath();
 
+        function onWrite() {}
+
+        // node exists
+
         treeStore.addMocks({
-            _write: function (path, value) {
-                strictEqual(path, destinationPath, "Destination path");
-                equal(value, 'hello', "Node value");
+            _write: function () {
+                // should not be called
+                ok(true, "Storage write called");
             }
         });
         sntls.Tree.addMocks({
-            getSafeNode: function (path, handler) {
-                handler(path, 'hello');
+            getSafeNode: function () {
+                // no change, handler is not called
                 return 'hello';
             }
         });
@@ -143,20 +147,23 @@
         treeStore.removeMocks();
         sntls.Tree.removeMocks();
 
+        // node does not exist
+
         treeStore.addMocks({
-            _write: function (path, value) {
-                deepEqual(path, destinationPath.clone().trim(), "Safe destination path");
+            _write: function (path, value, handler) {
+                strictEqual(path, destinationPath, "Safe destination path");
                 deepEqual(value, {}, "Safe node value");
+                strictEqual(handler, onWrite, "Write event handler");
             }
         });
         sntls.Tree.addMocks({
             getSafeNode: function (path, handler) {
-                handler(destinationPath.clone().trim(), {});
+                handler(destinationPath, {});
                 return {};
             }
         });
 
-        deepEqual(treeStore.getSafeNode(destinationPath), {}, "Safe node retrieved");
+        deepEqual(treeStore.getSafeNode(destinationPath, onWrite), {}, "Safe node retrieved");
 
         treeStore.removeMocks();
         sntls.Tree.removeMocks();
