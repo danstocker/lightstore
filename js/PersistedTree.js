@@ -113,7 +113,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             getSafeNode: function (path, handler) {
                 var that = this;
 
-                return base.getSafeNode(path, function (path, value) {
+                return base.getSafeNode.call(this, path, function (path, value) {
                     // a new node was created
                     that._write(path, value, handler);
                 });
@@ -128,7 +128,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             getOrSetNode: function (path, generator, handler) {
                 var that = this;
 
-                return base.getOrSetNode(path, generator, function (path, value) {
+                return base.getOrSetNode.call(this, path, generator, function (path, value) {
                     // a new node was created
                     that._write(path, value, handler);
                 });
