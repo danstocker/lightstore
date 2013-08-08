@@ -164,7 +164,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             unsetKey: function (path, splice, handler) {
                 var that = this;
 
-                base.unsetKey(path, splice, function (actualPath) {
+                base.unsetKey.call(this, path, splice, function (actualPath) {
                     // removing node or parent node depending on 'slice' flag
                     that._write(actualPath, undefined, handler);
                 });
@@ -181,7 +181,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             unsetPath: function (path, splice, handler) {
                 var that = this;
 
-                base.unsetPath(path, splice, function (actualPath) {
+                base.unsetPath.call(this, path, splice, function (actualPath) {
                     // original path may be relative to actual path
                     that._write(actualPath, undefined, handler);
                 });
