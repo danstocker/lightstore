@@ -326,4 +326,36 @@
         treeStore.removeMocks();
         sntls.Tree.removeMocks();
     });
+
+    test("Unsetting path", function () {
+        expect(5);
+
+        var treeStore = /** @type {lightstore.PersistedTree} */
+                lightstore.PersistedTree.create('test.ls'),
+            destinationPath = 'foo>bar'.toPath(),
+            result;
+
+        function onUnset() {}
+
+        treeStore.addMocks({
+            _write: function (path, value, handler) {
+                deepEqual(path, destinationPath.clone().trim(), "Destination path");
+                equal(typeof value, 'undefined', "Undefined node value");
+                strictEqual(handler, onUnset, "Unset handler");
+            }
+        });
+        sntls.Tree.addMocks({
+            unsetPath: function (path, splice, handler) {
+                strictEqual(path, destinationPath, "Destination path");
+                handler(path.clone().trim());
+            }
+        });
+
+        result = treeStore.unsetPath(destinationPath, false, onUnset);
+
+        strictEqual(result, treeStore, "Node unset is chainable");
+
+        treeStore.removeMocks();
+        sntls.Tree.removeMocks();
+    });
 }());

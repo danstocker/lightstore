@@ -158,8 +158,8 @@ troop.postpone(lightstore, 'PersistedTree', function () {
 
             /**
              * @param {sntls.Path} path
-             * @param {boolean} splice
-             * @param {function} handler
+             * @param {boolean} [splice=false]
+             * @param {function} [handler]
              */
             unsetKey: function (path, splice, handler) {
                 var that = this;
@@ -172,8 +172,21 @@ troop.postpone(lightstore, 'PersistedTree', function () {
                 return this;
             },
 
-            unsetPath: function () {
+            /**
+             * @param {sntls.Path} path
+             * @param {boolean} [splice=false]
+             * @param {function} [handler]
+             * @returns {*}
+             */
+            unsetPath: function (path, splice, handler) {
+                var that = this;
 
+                base.unsetPath(path, splice, function (actualPath) {
+                    // original path may be relative to actual path
+                    that._write(actualPath, undefined, handler);
+                });
+
+                return this;
             }
         });
 });
