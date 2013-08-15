@@ -18,14 +18,17 @@ troop.postpone(lightstore, 'File', function () {
      * @extends troop.Base
      */
     lightstore.File = troop.Base.extend()
-        .addSurrogate(lightstore, 'Json', function (fileName) {
-            return path.extname(fileName) === '.json';
+        .prepareSurrogates(function (fileName) {
+            return [path.extname(fileName)];
         })
-        .addSurrogate(lightstore, 'Rjson', function (fileName) {
-            return path.extname(fileName) === '.rjson';
+        .addSurrogate(lightstore, 'Json', function (fileExt) {
+            return fileExt === '.json';
         })
-        .addSurrogate(lightstore, 'KeyValueStore', function (fileName) {
-            return path.extname(fileName) === '.ls';
+        .addSurrogate(lightstore, 'Rjson', function (fileExt) {
+            return fileExt === '.rjson';
+        })
+        .addSurrogate(lightstore, 'KeyValueStore', function (fileExt) {
+            return fileExt === '.ls';
         })
         .addMethods(/** @lends lightstore.File# */{
             /**
@@ -39,5 +42,22 @@ troop.postpone(lightstore, 'File', function () {
                  */
                 this.fileName = fileName;
             }
+
+            /**
+             * Reads data from file.
+             * @name lightstore.File#read
+             * @function
+             * @param {function} [handler]
+             * @returns {lightstore.File}
+             */
+
+            /**
+             * Writes data to file.
+             * @name lightstore.File#write
+             * @function
+             * @param {*} data
+             * @param {function} [handler]
+             * @returns {lightstore.File}
+             */
         });
 });
