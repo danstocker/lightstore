@@ -39,16 +39,6 @@ troop.postpone(lightstore, 'Json', function () {
                 }
 
                 handler(err, parsed);
-            },
-
-            /**
-             * Called when plain JSON data is saved to disk.
-             * @param {function} handler
-             * @param {Error} err
-             * @private
-             */
-            _onWrite: function (handler, err) {
-                handler(err);
             }
         })
         .addMethods(/** @lends lightstore.Json# */{
@@ -75,12 +65,12 @@ troop.postpone(lightstore, 'Json', function () {
              * @returns {*}
              */
             write: function (data, handler) {
-                dessert.isFunction(handler, "Invalid read handler");
+                dessert.isFunctionOptional(handler, "Invalid read handler");
 
                 fs.writeFile(
                     this.fileName,
                     JSON.stringify(data),
-                    self._onWrite.bind(this, handler)
+                    handler
                 );
 
                 return this;
