@@ -52,7 +52,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
                 var file = this.file;
                 if (file.isA(lightstore.KeyValueStore)) {
                     // persisting node
-                    file.write(path, value, handler);
+                    file.write(value, handler, path);
                 } else {
                     process.stdout.write("Change not written to file. Save contents to new file via `ls.saveAs()`.\n");
                 }
@@ -90,8 +90,8 @@ troop.postpone(lightstore, 'PersistedTree', function () {
              * @returns {lightstore.PersistedTree}
              */
             saveAs: function (fileName, handler) {
-                lightstore.KeyValueStore.create(fileName)
-                    .write([].toPath(), this.items, handler);
+                lightstore.File.create(fileName)
+                    .write(this.items, handler);
                 return this;
             },
 
@@ -101,7 +101,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
              * @returns {lightstore.PersistedTree}
              */
             save: function (handler) {
-                this.saveAs(this.file.fileName, handler);
+                this.file.write(this.items, handler);
                 return this;
             },
 

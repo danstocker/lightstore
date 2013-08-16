@@ -74,12 +74,14 @@ troop.postpone(lightstore, 'KeyValueStore', function () {
 
             /**
              * Writes a value to a path.
-             * @param {sntls.Path} path
              * @param {*} value
              * @param {function} [handler]
+             * @param {sntls.Path} [path]
              * @returns {lightstore.KeyValueStore}
              */
-            write: function (path, value, handler) {
+            write: function (value, handler, path) {
+                path = path || [].toPath();
+
                 var buffer = [
                     {
                         k: path

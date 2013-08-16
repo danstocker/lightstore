@@ -48,9 +48,9 @@
         function onSaved() {}
 
         lightstore.KeyValueStore.addMocks({
-            write: function (path, value, handler) {
+            write: function (value, handler, path) {
                 equal(this.fileName, 'test.ls', "File name");
-                deepEqual(path.asArray, [], "Empty path");
+                equal(typeof path, 'undefined', "Empty path");
                 deepEqual(value, {}, "Contents");
                 strictEqual(handler, onSaved, "Success handler");
             }
@@ -67,19 +67,21 @@
     });
 
     test("Saving", function () {
-        expect(3);
+        expect(5);
 
         function onSave() {}
 
-        lightstore.PersistedTree.addMocks({
-            saveAs: function (fileName, handler) {
-                equal(fileName, 'foo.ls', "File name");
-                strictEqual(handler, onSave, "Handler");
-            }
-        });
-
         var treeStore = lightstore.PersistedTree.create('foo.ls'),
             result;
+
+        lightstore.KeyValueStore.addMocks({
+            write: function (value, handler, path) {
+                equal(this.fileName, 'foo.ls', "File name");
+                equal(typeof path, 'undefined', "Empty path");
+                strictEqual(value, treeStore.items, "Contents");
+                strictEqual(handler, onSave, "Success handler");
+            }
+        });
 
         result = treeStore.save(onSave);
 
@@ -98,7 +100,7 @@
         function onWrite() {}
 
         treeStore.file.addMocks({
-            write: function (path, value, handler) {
+            write: function (value, handler, path) {
                 strictEqual(path, destinationPath, "Destination path");
                 equal(value, 'hello', "Node value");
                 strictEqual(handler, onWrite, "Write handler");

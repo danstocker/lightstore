@@ -136,7 +136,35 @@
             }
         });
 
-        result = store.write(['test', 'path'].toPath(), {foo: "bar"}, onSaved);
+        result = store.write({foo: "bar"}, onSaved, ['test', 'path'].toPath());
+        strictEqual(result, store, "Writing is chainable");
+
+        lightstore.Rjson.removeMocks();
+    });
+
+    test("Default path", function () {
+        expect(3);
+
+        var store = lightstore.KeyValueStore.create('foo.rjson'),
+            result;
+
+        function onSaved() {}
+
+        lightstore.Rjson.addMocks({
+            write: function (buffer, handler) {
+                deepEqual(
+                    buffer,
+                    [
+                        {k: "root", v: {foo: "bar"}}
+                    ],
+                    "Buffer containing path/value pair"
+                );
+
+                strictEqual(handler, onSaved, "On-save handler");
+            }
+        });
+
+        result = store.write({foo: "bar"}, onSaved);
         strictEqual(result, store, "Writing is chainable");
 
         lightstore.Rjson.removeMocks();
