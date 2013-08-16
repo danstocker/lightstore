@@ -39,6 +39,16 @@ troop.postpone(lightstore, 'Json', function () {
                 }
 
                 handler(err, parsed);
+            },
+
+            /**
+             * Called when plain JSON data is saved to disk.
+             * @param {function} handler
+             * @param {Error} err
+             * @private
+             */
+            _onWrite: function (handler, err) {
+                handler(err);
             }
         })
         .addMethods(/** @lends lightstore.Json# */{
@@ -53,6 +63,24 @@ troop.postpone(lightstore, 'Json', function () {
                 fs.readFile(
                     this.fileName,
                     self._onRead.bind(this, handler)
+                );
+
+                return this;
+            },
+
+            /**
+             * Writes JSON file. Overwrites existing contents.
+             * @param data
+             * @param handler
+             * @returns {*}
+             */
+            write: function (data, handler) {
+                dessert.isFunction(handler, "Invalid read handler");
+
+                fs.writeFile(
+                    this.fileName,
+                    JSON.stringify(data),
+                    self._onWrite.bind(this, handler)
                 );
 
                 return this;

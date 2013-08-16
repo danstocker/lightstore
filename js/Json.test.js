@@ -9,12 +9,12 @@
     module("Json");
 
     test("General reading", function () {
-        var rjson = lightstore.Json.create('test.foo');
+        var json = lightstore.Json.create('test.foo');
 
         expect(2);
 
         raises(function () {
-            rjson.read();
+            json.read();
         }, "Calling read without a handler specified");
 
         fs.addMocks({
@@ -23,7 +23,7 @@
             }
         });
 
-        rjson.read(function () {});
+        json.read(function () {});
 
         fs.removeMocks();
     });
@@ -31,17 +31,36 @@
     test("Reading plain JSON", function () {
         expect(1);
 
-        var rjson = lightstore.Json.create('test.json');
+        var json = lightstore.Json.create('test.json');
 
         fs.addMocks({
             readFile: function (fileName, handler) {
-                // returns RJSON contents
+                // returns JSON contents
                 handler(undefined, '{"hello":"world"}');
             }
         });
 
-        rjson.read(function (err, data) {
+        json.read(function (err, data) {
             deepEqual(data, {hello: "world"}, "Json contents");
+        });
+
+        fs.removeMocks();
+    });
+
+    test("Writing plain JSON", function () {
+        expect(2);
+
+        var json = lightstore.Json.create('test.json');
+
+        fs.addMocks({
+            writeFile: function (fileName, data, handler) {
+                equal(data, JSON.stringify({hello: "world"}), "Json contents");
+                handler(undefined);
+            }
+        });
+
+        json.write({hello: "world"}, function () {
+            ok(true, "handler called");
         });
 
         fs.removeMocks();
