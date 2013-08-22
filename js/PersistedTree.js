@@ -29,12 +29,16 @@ troop.postpone(lightstore, 'PersistedTree', function () {
              * @private
              */
             _onRead: function (handler, err, json) {
-                var file = this.file,
-                    items = file.isA(lightstore.KeyValueStore) ?
+                var items;
+
+                if (!err) {
+                    // assigning items from file when file exists
+                    items = this.file.isA(lightstore.KeyValueStore) ?
                         json[0].v :
                         json;
 
-                this.items = items;
+                    this.items = items;
+                }
 
                 if (handler) {
                     handler(err, items);
