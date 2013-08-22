@@ -58,7 +58,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
                     // persisting node
                     file.write(value, handler, path);
                 } else {
-                    process.stdout.write("Change not written to file. Save contents to new file via `ls.saveAs()`.\n");
+                    process.stdout.write("Change not written to file. Save contents via `ls.save()` or `ls.saveAs()`.\n");
                 }
             }
         })
