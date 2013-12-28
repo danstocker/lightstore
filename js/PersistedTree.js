@@ -191,6 +191,21 @@ troop.postpone(lightstore, 'PersistedTree', function () {
         });
 });
 
+troop.amendPostponed(sntls, 'Hash', function () {
+    "use strict";
+
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
+        /**
+         * Reinterprets hash as a persisted tree.
+         * @param {string} fileName
+         * @returns {sntls.Tree}
+         */
+        toPersistedTree: function (fileName) {
+            return lightstore.PersistedTree.create(fileName, this.items);
+        }
+    });
+});
+
 (function () {
     "use strict";
 
@@ -202,17 +217,6 @@ troop.postpone(lightstore, 'PersistedTree', function () {
         isPersistedTreeOptional: function (expr) {
             return typeof expr === 'undefined' ||
                    lightstore.PersistedTree.isBaseOf(expr);
-        }
-    });
-
-    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
-        /**
-         * Reinterprets hash as a persisted tree.
-         * @param {string} fileName
-         * @returns {sntls.Tree}
-         */
-        toPersistedTree: function (fileName) {
-            return lightstore.PersistedTree.create(fileName, this.items);
         }
     });
 }());
