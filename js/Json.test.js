@@ -1,4 +1,4 @@
-/*global module, test, expect, raises, ok, equal, deepEqual */
+/*global module, test, expect, raises, ok, equal, strictEqual, deepEqual */
 /*global lightstore */
 /*jshint node:true */
 (function () {
@@ -62,6 +62,35 @@
         json.write({hello: "world"}, function () {
             ok(true, "handler called");
         });
+
+        fs.removeMocks();
+    });
+
+    test("Clearing contents", function () {
+        expect(6);
+
+        var json = lightstore.Json.create('test.json');
+
+        function onClear () {}
+
+        raises(function () {
+            json.clear('foo');
+        }, "should raise exception on invalid handler");
+
+        fs.addMocks({
+            exists: function (fileName, handler) {
+                equal(fileName, 'test.json', "should test if file exists");
+                handler(true);
+            },
+
+            writeFile: function (fileName, content, handler) {
+                equal(fileName, 'test.json', "should write file contents");
+                equal(content, '{}', "should pass empty string as contents to write");
+                strictEqual(handler, onClear, "should pass handler to write");
+            }
+        });
+
+        strictEqual(json.clear(onClear), json, "should be chainable");
 
         fs.removeMocks();
     });

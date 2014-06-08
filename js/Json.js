@@ -44,7 +44,7 @@ troop.postpone(lightstore, 'Json', function () {
         .addMethods(/** @lends lightstore.Json# */{
             /**
              * Reads JSON file.
-             * @param {function} handler Callback
+             * @param {function} [handler] Callback
              * @returns {lightstore.Json}
              */
             read: function (handler) {
@@ -61,17 +61,36 @@ troop.postpone(lightstore, 'Json', function () {
             /**
              * Writes JSON file. Overwrites existing contents.
              * @param data
-             * @param handler
-             * @returns {*}
+             * @param [handler]
+             * @returns {lightstore.Json}
              */
             write: function (data, handler) {
-                dessert.isFunctionOptional(handler, "Invalid read handler");
+                dessert.isFunctionOptional(handler, "Invalid write handler");
 
                 fs.writeFile(
                     this.fileName,
                     JSON.stringify(data),
                     handler
                 );
+
+                return this;
+            },
+
+            /**
+             * Clears JSON contents.
+             * @param {function} [handler]
+             * @returns {lightstore.Json}
+             */
+            clear: function (handler) {
+                dessert.isFunctionOptional(handler, "Invalid clear handler");
+
+                var fileName = this.fileName;
+
+                fs.exists(fileName, function (exists) {
+                    if (exists) {
+                        fs.writeFile(fileName, JSON.stringify({}), handler);
+                    }
+                });
 
                 return this;
             }

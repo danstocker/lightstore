@@ -69,6 +69,7 @@ troop.postpone(lightstore, 'Rjson', function () {
             }
         })
         .addMethods(/** @lends lightstore.Rjson# */{
+            /** @ignore */
             init: function (fileName) {
                 base.init.call(this, fileName);
 
@@ -150,6 +151,25 @@ troop.postpone(lightstore, 'Rjson', function () {
                         serialized,
                         handler
                     );
+                });
+
+                return this;
+            },
+
+            /**
+             * Clears RJSON database.
+             * @param {function} [handler] Callback
+             * @returns {lightstore.Rjson}
+             */
+            clear: function (handler) {
+                dessert.isFunctionOptional(handler, "Invalid write handler");
+
+                var fileName = this.fileName;
+
+                fs.exists(fileName, function (exists) {
+                    if (exists) {
+                        fs.writeFile(fileName, '', handler);
+                    }
                 });
 
                 return this;

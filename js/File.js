@@ -59,5 +59,13 @@ troop.postpone(lightstore, 'File', function () {
              * @param {function} [handler]
              * @returns {lightstore.File}
              */
+
+            /**
+             * Clears file contents
+             * @name lightstore.File#clear
+             * @function
+             * @param {function} [handler]
+             * @returns {lightstore.File}
+             */
         });
 });
