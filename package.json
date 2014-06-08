@@ -8,7 +8,7 @@
         "key-value"
     ],
     "author"         : "Dan Stocker <dan@kwaia.com>",
-    "copyright"      : "Copyright (c) 2012-2013 Dan Stocker",
+    "copyright"      : "Copyright (c) 2012-2014 Dan Stocker",
     "license"        : "MIT",
     "repository"     : {
         "type": "git",
@@ -17,7 +17,7 @@
     "dependencies"   : {
         "dessert": "~0.3.2",
         "troop"  : "~0.7.2",
-        "sntls"  : "~0.16.1"
+        "sntls"  : "~0.17.0"
     },
     "devDependencies": {
         "phil"                : "~0.2.3",
