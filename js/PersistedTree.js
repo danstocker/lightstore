@@ -151,6 +151,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
             /**
              * @param {sntls.Path} path
              * @param {function} [handler]
+             * @returns {lightstore.PersistedTree}
              */
             unsetNode: function (path, handler) {
                 base.unsetNode.call(this, path);
@@ -162,6 +163,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
              * @param {sntls.Path} path
              * @param {boolean} [splice=false]
              * @param {function} [handler]
+             * @returns {lightstore.PersistedTree}
              */
             unsetKey: function (path, splice, handler) {
                 var that = this;
@@ -177,7 +179,7 @@ troop.postpone(lightstore, 'PersistedTree', function () {
              * @param {sntls.Path} path
              * @param {boolean} [splice=false]
              * @param {function} [handler]
-             * @returns {*}
+             * @returns {lightstore.PersistedTree}
              */
             unsetPath: function (path, splice, handler) {
                 var that = this;
